@@ -1,0 +1,64 @@
+# openspec/config.yaml
+schema: spec-driven
+project: landing_page
+package_name: rodsanctechs
+persistence: hybrid
+strict_tdd: false
+
+context: |
+  Tech stack: Bun + Vite 6 + React 19 + TypeScript 5.7 (strict) + Tailwind CSS 4.
+  Architecture: single-page marketing SPA (no router). Sections in src/components; chat/leads/analytics in src/hooks and src/lib.
+  Testing: no unit/integration/E2E runner. Quality gate is `bun run lint` (`tsc -b --noEmit`) and `bun run build`.
+  Style: Spanish UI (html lang=es, es_VE). Brand RodSancTechs. PRODUCT.md stack line is stale (says plain HTML/CSS/JS).
+  Integrations: OpenRouter chat (VITE_OPENROUTER_KEY), Google Apps Script leads (VITE_SHEETS_URL), optional GTM dataLayer.
+  Repo: not a git repository. No CI. No ESLint/Prettier/Biome. Leftover css/ and js/ from a pre-Vite static site.
+
+testing:
+  strict_tdd: false
+  strict_tdd_reason: "No test runner detected (no vitest/jest/playwright deps, no src test files). Fallback: strict_tdd false."
+  runner:
+    command: ""
+    framework: none
+  layers:
+    unit: { available: false, tool: "" }
+    integration: { available: false, tool: "" }
+    e2e: { available: false, tool: "" }
+  coverage:
+    available: false
+    command: ""
+  quality:
+    linter: { available: false, command: "" }
+    type_checker: { available: true, command: "bun run lint" }
+    formatter: { available: false, command: "" }
+  build_command: "bun run build"
+  detected: "2026-09-07"
+
+rules:
+  proposal:
+    - Include rollback plan for risky changes
+    - Do not invent testimonials, portfolio, or credentials (PRODUCT.md evidence constraint)
+    - Keep public copy in Spanish unless a change explicitly localizes
+  specs:
+    - Use Given/When/Then for scenarios
+    - Use RFC 2119 keywords (MUST, SHALL, SHOULD, MAY)
+    - Specs are English; UI copy requirements may quote Spanish strings
+  design:
+    - Include sequence diagrams for chat, lead capture, and analytics flows
+    - Document architecture decisions with rationale
+    - Never persist secrets (OpenRouter keys, .env values) in specs or design docs
+  tasks:
+    - Group by phase, use hierarchical numbering
+    - Keep tasks completable in one session
+    - Do not add a test harness unless the change's purpose is testing
+  apply:
+    - Follow existing code patterns (section components, Tailwind @theme tokens, Spanish copy)
+    tdd: false
+    test_command: ""
+  verify:
+    test_command: ""
+    build_command: "bun run build"
+    typecheck_command: "bun run lint"
+    coverage_threshold: 0
+  archive:
+    - Warn before merging destructive deltas
+    - Do not archive secrets into main specs
