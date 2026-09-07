@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { compileWhatsAppLink, useChat } from "../hooks/useChat";
 import { CHAT_OPEN_EVENT } from "../lib/chat-events";
-import { CONTACT_NAME } from "../lib/systemprompt";
+import { INTENTION_LIST } from "../lib/faq_brief_questions";
+import { BOT_NAME } from "../lib/systemprompt";
 
 function WhatsAppIcon({ className = "w-7 h-7" }: { className?: string }) {
   return (
@@ -51,10 +52,169 @@ function Bubble({ isUser, children }: { isUser: boolean; children: React.ReactNo
   );
 }
 
+function ListIcon() {
+  return (
+    <svg viewBox="0 0 24 24" className="w-4 h-4" fill="currentColor" aria-hidden="true">
+      <path d="M4 6h2v2H4V6zm0 5h2v2H4v-2zm0 5h2v2H4v-2zM8 6h12v2H8V6zm0 5h12v2H8v-2zm0 5h12v2H8v-2z" />
+    </svg>
+  );
+}
+
+function RadioMark({ checked }: { checked: boolean }) {
+  return (
+    <span
+      className={`mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full border ${
+        checked ? "border-wa-header" : "border-slate-400"
+      }`}
+      aria-hidden="true"
+    >
+      {checked && <span className="h-2 w-2 rounded-full bg-wa-header" />}
+    </span>
+  );
+}
+
+function CheckMark({ checked }: { checked: boolean }) {
+  return (
+    <span
+      className={`mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-[3px] border ${
+        checked ? "border-wa-header bg-wa-header text-white" : "border-slate-400"
+      }`}
+      aria-hidden="true"
+    >
+      {checked && (
+        <svg viewBox="0 0 12 12" className="h-3 w-3" fill="none" stroke="currentColor" strokeWidth="2">
+          <path d="M2 6l3 3 5-5" />
+        </svg>
+      )}
+    </span>
+  );
+}
+
+type ListItem = { id: string; title: string; description?: string };
+
+function ListSheet({
+  title,
+  mode,
+  items,
+  onClose,
+  onConfirm,
+}: {
+  title: string;
+  mode: "radio" | "check";
+  items: readonly ListItem[];
+  onClose: () => void;
+  onConfirm: (titles: string[]) => void;
+}) {
+  const [picked, setPicked] = useState<string[]>([]);
+
+  const toggle = (id: string) => {
+    if (mode === "radio") {
+      const item = items.find((entry) => entry.id === id);
+      if (item) onConfirm([item.title]);
+      return;
+    }
+    setPicked((current) =>
+      current.includes(id) ? current.filter((value) => value !== id) : [...current, id],
+    );
+  };
+
+  const confirmCheck = () => {
+    const titles = items.filter((item) => picked.includes(item.id)).map((item) => item.title);
+    if (titles.length) onConfirm(titles);
+  };
+
+  return (
+    <div
+      className="absolute inset-0 z-10 flex flex-col justify-end bg-black/25"
+      role="dialog"
+      aria-modal="true"
+      aria-label={title}
+    >
+      <button
+        type="button"
+        className="absolute inset-0 cursor-default"
+        aria-label="Cerrar lista"
+        onClick={onClose}
+      />
+      <div className="relative flex max-h-[70%] flex-col rounded-t-2xl bg-white shadow-[0_-8px_24px_rgba(17,27,33,0.12)]">
+        <div className="flex items-center gap-3 border-b border-slate-100 px-4 py-3">
+          <button
+            type="button"
+            onClick={onClose}
+            aria-label="Cerrar"
+            className="text-slate-500 hover:text-wa-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-wa-header"
+          >
+            <span className="text-lg leading-none">×</span>
+          </button>
+          <p className="text-[15px] font-semibold text-wa-ink">{title}</p>
+        </div>
+        <ul className="flex-1 overflow-y-auto py-1">
+          {items.map((item) => {
+            const checked = picked.includes(item.id);
+            return (
+              <li key={item.id}>
+                <button
+                  type="button"
+                  onClick={() => toggle(item.id)}
+                  className={`flex w-full items-start gap-3 px-4 py-3 text-left hover:bg-slate-100 focus-visible:bg-slate-100 focus-visible:outline-none ${
+                    checked ? "bg-slate-50" : ""
+                  }`}
+                >
+                  <span className="min-w-0 flex-1">
+                    <span className="block text-[15px] font-semibold text-wa-ink">
+                      {item.title}
+                    </span>
+                    {item.description && (
+                      <span className="mt-0.5 block text-[13px] leading-snug text-wa-subtle">
+                        {item.description}
+                      </span>
+                    )}
+                  </span>
+                  {mode === "check" ? (
+                    <CheckMark checked={checked} />
+                  ) : (
+                    <RadioMark checked={false} />
+                  )}
+                </button>
+              </li>
+            );
+          })}
+        </ul>
+        {mode === "check" && (
+          <div className="border-t border-slate-100 p-3">
+            <button
+              type="button"
+              disabled={!picked.length}
+              onClick={confirmCheck}
+              className="w-full rounded-full bg-wa-header py-2.5 text-sm font-semibold text-white hover:opacity-95 disabled:opacity-40"
+            >
+              Listo
+            </button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
 export default function ChatWidget() {
-  const { messages, typing, brief, briefClosed, saving, send, start, save, reset } = useChat();
+  const {
+    messages,
+    typing,
+    brief,
+    briefClosed,
+    saving,
+    chips,
+    faqChoice,
+    send,
+    start,
+    save,
+    reset,
+    selectChip,
+  } = useChat();
   const [open, setOpen] = useState(false);
   const [bubbleDismissed, setBubbleDismissed] = useState(false);
+  const [listOpen, setListOpen] = useState(false);
   const [input, setInput] = useState("");
   const bodyRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
@@ -76,9 +236,9 @@ export default function ChatWidget() {
   useEffect(() => {
     const el = bodyRef.current;
     if (el) el.scrollTop = el.scrollHeight;
-  }, [messages, typing, brief, open]);
+  }, [messages, typing, brief, chips, open]);
 
-  // Devolver foco al textarea cuando termina la respuesta del asistente
+  // Composer stays visible on chip turns (WhatsApp: replies in-thread, input bar persists).
   const prevTyping = useRef(typing);
   useEffect(() => {
     if (prevTyping.current && !typing) {
@@ -86,6 +246,12 @@ export default function ChatWidget() {
     }
     prevTyping.current = typing;
   }, [typing]);
+
+  useEffect(() => {
+    if (open) {
+      inputRef.current?.focus();
+    }
+  }, [open]);
 
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -95,13 +261,27 @@ export default function ChatWidget() {
   };
 
   const handleReset = () => {
+    setListOpen(false);
     reset();
     // start() solo actúa si el historial quedó vacío (lo acaba de vaciar reset)
-    start();
+    void start();
   };
 
   const inputDisabled = typing || brief !== null;
   const waLink = brief ? compileWhatsAppLink(brief) : "";
+  const showGreetList = Boolean(chips?.length) && chips!.length > 2 && !typing;
+  const showFaqList = Boolean(faqChoice) && !typing;
+  const showListTrigger = showGreetList || showFaqList;
+  const showConsent = chips?.length === 2 && !typing;
+
+  const pickList = (titles: string[]) => {
+    setListOpen(false);
+    if (showGreetList) {
+      void selectChip(titles[0] ?? "");
+      return;
+    }
+    void send(titles.join(", "));
+  };
 
   return (
     <>
@@ -127,7 +307,7 @@ export default function ChatWidget() {
           )}
           <button
             onClick={() => setOpen(true)}
-            aria-label="Abrir chat con Lester"
+            aria-label={`Abrir chat con ${BOT_NAME}`}
             className="w-16 h-16 rounded-full bg-wa-header text-white shadow-lg wa-pulse flex items-center justify-center hover:scale-105 transition-transform"
           >
             <WhatsAppIcon />
@@ -140,7 +320,7 @@ export default function ChatWidget() {
         <div
           className="fixed bottom-0 right-0 sm:bottom-6 sm:right-6 z-50 w-full sm:w-[min(92vw,380px)] h-[100dvh] sm:h-[min(80vh,620px)] sm:rounded-2xl overflow-hidden shadow-2xl flex flex-col chat-panel-enter bg-wa-bg"
           role="dialog"
-          aria-label={`Chat con ${CONTACT_NAME}`}
+          aria-label={`Chat con ${BOT_NAME}`}
         >
           {/* Header */}
           <div className="bg-wa-header text-white px-4 py-3 flex items-center gap-3 shrink-0">
@@ -154,11 +334,11 @@ export default function ChatWidget() {
               </svg>
             </button>
             <div className="w-10 h-10 rounded-full bg-gradient-to-br from-accent to-accent-deep flex items-center justify-center font-bold text-sm shrink-0">
-              {CONTACT_NAME[0]}
+              {BOT_NAME[0]}
             </div>
             <div className="flex-1 min-w-0">
               <p className="font-semibold text-[15px] leading-tight truncate">
-                {CONTACT_NAME} · RodSancTechs
+                {BOT_NAME} · RodSancTechs
               </p>
               <p className="text-xs text-white/80 leading-tight">
                 Responde en menos de 24 h · típicamente en 1-2 h
@@ -177,31 +357,67 @@ export default function ChatWidget() {
           </div>
 
           {/* Messages */}
-          <div ref={bodyRef} className="flex-1 overflow-y-auto wa-pattern px-3 py-4 flex flex-col gap-1.5">
+          <div className="relative flex-1 min-h-0">
+          <div ref={bodyRef} className="h-full overflow-y-auto wa-pattern px-3 py-4 flex flex-col gap-1.5">
             {messages.length === 0 && !typing && (
               <div className="text-center text-xs text-slate-500 py-6">
-                Conversación encriptada de extremo a extremo... no, mentira 😄 — pero sí atendida por {CONTACT_NAME}.
+                Conversación encriptada de extremo a extremo... no, mentira 😄 — pero sí atendida por {BOT_NAME}.
               </div>
             )}
 
-            {messages.map((m, i) => (
-              <Bubble key={i} isUser={m.role === "user"}>
-                <div>{m.content}</div>
-                {m.action?.type === "whatsapp" && (
-                  <div className="mt-2.5 pt-2 border-t border-slate-200/80 whitespace-normal">
-                    <a
-                      href={m.action.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center justify-center gap-2 w-full py-2 px-3 rounded-lg font-semibold text-white bg-[#25D366] hover:bg-[#20bd5a] active:scale-[0.98] transition-all text-xs sm:text-[13px] shadow-sm hover:shadow"
-                    >
-                      <WhatsAppIcon className="w-4 h-4 shrink-0" />
-                      <span>{m.action.label}</span>
-                    </a>
-                  </div>
-                )}
-              </Bubble>
-            ))}
+            {messages.map((m, i) => {
+              const isLastAssistant =
+                m.role === "assistant" &&
+                !messages.slice(i + 1).some((later) => later.role === "assistant");
+              return (
+                <div key={i}>
+                  <Bubble isUser={m.role === "user"}>
+                    <div>{m.content}</div>
+                    {m.action?.type === "whatsapp" && (
+                      <div className="mt-2.5 pt-2 border-t border-slate-200/80 whitespace-normal">
+                        <a
+                          href={m.action.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center justify-center gap-2 w-full py-2 px-3 rounded-lg font-semibold text-white bg-[#25D366] hover:bg-[#20bd5a] active:scale-[0.98] transition-all text-xs sm:text-[13px] shadow-sm hover:shadow"
+                        >
+                          <WhatsAppIcon className="w-4 h-4 shrink-0" />
+                          <span>{m.action.label}</span>
+                        </a>
+                      </div>
+                    )}
+                    {isLastAssistant && showListTrigger && (
+                      <button
+                        type="button"
+                        onClick={() => setListOpen(true)}
+                        className="-mx-3 mt-2 flex w-[calc(100%+1.5rem)] items-center justify-center gap-2 border-t border-slate-200/80 py-2.5 text-[14px] font-medium text-wa-header hover:bg-slate-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-wa-header"
+                      >
+                        <ListIcon />
+                        Clic aquí
+                      </button>
+                    )}
+                    {isLastAssistant && showConsent && (
+                      <div className="-mx-3 mt-2 border-t border-slate-200/80">
+                        {chips!.map((label) => (
+                          <button
+                            key={label}
+                            type="button"
+                            onClick={() => void selectChip(label)}
+                            className={`flex w-full items-center justify-center py-2.5 text-[14px] font-medium hover:bg-slate-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-wa-header ${
+                              label === "No"
+                                ? "text-wa-header border-t border-slate-200/80"
+                                : "text-wa-ink"
+                            }`}
+                          >
+                            {label}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </Bubble>
+                </div>
+              );
+            })}
 
             {typing && <TypingIndicator />}
 
@@ -213,7 +429,9 @@ export default function ChatWidget() {
                   <div className="space-y-1 text-[13px] text-slate-600">
                     {brief.projectType && <p><span className="text-slate-400">Tipo:</span> {brief.projectType}</p>}
                     {brief.idea && <p><span className="text-slate-400">Idea:</span> {brief.idea}</p>}
+                    {brief.target && <p><span className="text-slate-400">Negocio:</span> {brief.target}</p>}
                     {brief.problem && <p><span className="text-slate-400">Objetivo:</span> {brief.problem}</p>}
+                    {brief.modalidad && <p><span className="text-slate-400">Modalidad:</span> {brief.modalidad}</p>}
                     {brief.detailValue && <p><span className="text-slate-400">{brief.detailLabel || "Detalle"}:</span> {brief.detailValue}</p>}
                     {brief.complejidad && <p><span className="text-slate-400">Complejidad:</span> {brief.complejidad}</p>}
                     {brief.timeline && <p><span className="text-slate-400">Plazo:</span> {brief.timeline}</p>}
@@ -222,6 +440,7 @@ export default function ChatWidget() {
                     {brief.nombre && <p><span className="text-slate-400">Nombre:</span> {brief.nombre}</p>}
                     {brief.email && <p><span className="text-slate-400">Email:</span> {brief.email}</p>}
                     {brief.whatsapp && <p><span className="text-slate-400">Contacto:</span> {brief.whatsapp}</p>}
+                    {brief.pais && <p><span className="text-slate-400">País:</span> {brief.pais}</p>}
                   </div>
 
                   <p className="text-[12px] text-slate-500 mt-3 leading-relaxed">
@@ -273,34 +492,43 @@ export default function ChatWidget() {
               </div>
             )}
           </div>
-
-          {/* Input */}
-          <form onSubmit={onSubmit} className="bg-[#f0f2f5] px-3 py-2.5 flex items-end gap-2 shrink-0">
-            <textarea
-              ref={inputRef}
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" && !e.shiftKey) {
-                  e.preventDefault();
-                  onSubmit(e);
-                }
-              }}
-              rows={1}
-              disabled={inputDisabled}
-              placeholder={brief ? "Conversación completada" : "Escribe un mensaje"}
-              aria-label="Mensaje"
-              className="flex-1 resize-none rounded-full px-4 py-2.5 text-[15px] bg-white text-wa-ink placeholder-slate-400 outline-none focus:ring-1 focus:ring-wa-header disabled:opacity-60"
+          {listOpen && showListTrigger && (
+            <ListSheet
+              title="Clic aquí"
+              mode={faqChoice?.mode ?? "radio"}
+              items={faqChoice?.options ?? INTENTION_LIST}
+              onClose={() => setListOpen(false)}
+              onConfirm={pickList}
             />
-            <button
-              type="submit"
-              disabled={inputDisabled || !input.trim()}
-              aria-label="Enviar"
-              className="w-11 h-11 rounded-full bg-wa-header text-white flex items-center justify-center hover:opacity-95 transition-opacity disabled:opacity-40 shrink-0"
-            >
-              <SendIcon />
-            </button>
-          </form>
+          )}
+          </div>
+
+          <form onSubmit={onSubmit} className="bg-[#f0f2f5] px-3 py-2.5 flex items-end gap-2 shrink-0">
+              <textarea
+                ref={inputRef}
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" && !e.shiftKey) {
+                    e.preventDefault();
+                    onSubmit(e);
+                  }
+                }}
+                rows={1}
+                disabled={inputDisabled}
+                placeholder={brief ? "Conversación completada" : "Escribe un mensaje"}
+                aria-label="Mensaje"
+                className="flex-1 resize-none rounded-full px-4 py-2.5 text-[15px] bg-white text-wa-ink placeholder-slate-400 outline-none focus:ring-1 focus:ring-wa-header disabled:opacity-60"
+              />
+              <button
+                type="submit"
+                disabled={inputDisabled || !input.trim()}
+                aria-label="Enviar"
+                className="w-11 h-11 rounded-full bg-wa-header text-white flex items-center justify-center hover:opacity-95 transition-opacity disabled:opacity-40 shrink-0"
+              >
+                <SendIcon />
+              </button>
+            </form>
         </div>
       )}
     </>

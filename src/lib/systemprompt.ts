@@ -1,4 +1,6 @@
 export const CONTACT_NAME = "Lester/Yuleisi";
+/** Nombre del bot del chat: Rod(Sanc) + i. */
+export const BOT_NAME = "Rodsi";
 
 /**
  * SYSTEM PROMPT — Asistente de admisiones RodSancTechs (v3)

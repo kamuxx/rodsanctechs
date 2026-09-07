@@ -10,6 +10,33 @@ function Arrow({ className = "w-4 h-4" }: { className?: string }) {
 
 const pymeServices = [
   {
+    title: "Landing informativa",
+    desc: "Una página clara para presentar la oferta y convertir visitas en contacto.",
+    icon: <path d="M4 4h16v16H4zM8 8h8M8 12h8M8 16h5" />,
+  },
+  {
+    title: "Sitio corporativo",
+    desc: "Varias páginas para contar la empresa, servicios, equipo y contacto.",
+    icon: (
+      <>
+        <rect x="3" y="3" width="7" height="7" />
+        <rect x="14" y="3" width="7" height="7" />
+        <rect x="3" y="14" width="7" height="7" />
+        <rect x="14" y="14" width="7" height="7" />
+      </>
+    ),
+  },
+  {
+    title: "Blog",
+    desc: "Publicar artículos, noticias o contenidos para atraer y educar.",
+    icon: (
+      <>
+        <path d="M4 4h16v16H4z" />
+        <path d="M8 8h8M8 12h8M8 16h5" />
+      </>
+    ),
+  },
+  {
     title: "ERP a medida",
     desc: "Inventario, ventas, compras y reportes en un solo sistema que crece contigo.",
     icon: <path d="M12 20V10M18 20V4M6 20v-4" />,
