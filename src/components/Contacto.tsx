@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { saveLead } from "../lib/saveLead";
 import { track } from "../lib/analytics";
 
@@ -12,8 +12,18 @@ const TIPO_SERVICIO = [
   "Otro",
 ] as const;
 
+const EMAIL_USER = "lesterrodriguez3101";
+const EMAIL_DOMAIN = "gmail.com";
+
 export default function Contacto() {
   const [nombre, setNombre] = useState("");
+  const [emailVisible, setEmailVisible] = useState(false);
+  const emailLinkRef = useRef<HTMLAnchorElement>(null);
+
+  function revealEmail() {
+    setEmailVisible(true);
+    requestAnimationFrame(() => emailLinkRef.current?.focus());
+  }
   const [contacto, setContacto] = useState("");
   const [tipoServicio, setTipoServicio] = useState("");
   const [mensaje, setMensaje] = useState("");
@@ -94,18 +104,35 @@ export default function Contacto() {
                 </span>
                 +58 412 261 9542
               </a>
-              <a
-                href="mailto:lesterrodriguez3101@gmail.com"
-                className="flex items-center gap-3 hover:text-slate-900 transition-colors"
-              >
-                <span className="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center">
-                  <svg className="w-5 h-5 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                    <rect x="2" y="4" width="20" height="16" rx="2" />
-                    <path d="M22 6l-10 7L2 6" />
-                  </svg>
-                </span>
-                lesterrodriguez3101@gmail.com
-              </a>
+              {emailVisible ? (
+                <a
+                  ref={emailLinkRef}
+                  href={`mailto:${EMAIL_USER}@${EMAIL_DOMAIN}`}
+                  className="flex items-center gap-3 hover:text-slate-900 transition-colors"
+                >
+                  <span className="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center">
+                    <svg className="w-5 h-5 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                      <rect x="2" y="4" width="20" height="16" rx="2" />
+                      <path d="M22 6l-10 7L2 6" />
+                    </svg>
+                  </span>
+                  {EMAIL_USER}@{EMAIL_DOMAIN}
+                </a>
+              ) : (
+                <button
+                  type="button"
+                  onClick={revealEmail}
+                  className="flex items-center gap-3 hover:text-slate-900 transition-colors text-left"
+                >
+                  <span className="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center">
+                    <svg className="w-5 h-5 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                      <rect x="2" y="4" width="20" height="16" rx="2" />
+                      <path d="M22 6l-10 7L2 6" />
+                    </svg>
+                  </span>
+                  Ver email
+                </button>
+              )}
             </div>
           </div>
 
