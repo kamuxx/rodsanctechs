@@ -4,11 +4,41 @@ import { track } from "../lib/analytics";
 
 type FormState = "idle" | "sending" | "sent" | "error";
 
+const TIPO_SERVICIO = [
+  "Nuevo proyecto",
+  "Rediseño de uno actual",
+  "Mantenimiento de solución existente",
+  "Integración con otros sistemas",
+  "Otro",
+] as const;
+
 export default function Contacto() {
   const [nombre, setNombre] = useState("");
   const [contacto, setContacto] = useState("");
+  const [tipoServicio, setTipoServicio] = useState("");
   const [mensaje, setMensaje] = useState("");
   const [state, setState] = useState<FormState>("idle");
+
+  const buildWhatsAppUrl = () => {
+    const phone = "584165359897";
+    const ACCIONES: Record<string, string> = {
+      "Nuevo proyecto": "Necesito desarrollar un nuevo proyecto",
+      "Rediseño de uno actual": "Necesito rediseñar un proyecto existente",
+      "Mantenimiento de solución existente": "Necesito ayuda con el mantenimiento de una solución",
+      "Integración con otros sistemas": "Necesito integrar sistemas",
+      Otro: "Tengo una necesidad especial",
+    };
+    const detalle = mensaje.trim();
+    const accion = detalle
+      ? ""
+      : tipoServicio
+        ? `${ACCIONES[tipoServicio] ?? "Tengo un proyecto"}. `
+        : "";
+    const text = encodeURIComponent(
+      `Hola, mi nombre es ${nombre.trim()}. ${accion}${detalle}. ¿Podemos conversar?`
+    );
+    return `https://wa.me/${phone}?text=${text}`;
+  };
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -19,11 +49,17 @@ export default function Contacto() {
       await saveLead({
         nombre: nombre.trim(),
         whatsapp: contacto.trim(),
+        tipo_servicio: tipoServicio,
         mensaje: mensaje.trim(),
         fuente: "formulario-contacto",
       });
-      setState("sent");
       track("contact_form_ok");
+      window.open(buildWhatsAppUrl(), "_blank", "noopener,noreferrer");
+      setNombre("");
+      setContacto("");
+      setTipoServicio("");
+      setMensaje("");
+      setState("sent");
     } catch (err) {
       console.error("Lead save error:", err);
       setState("error");
@@ -77,7 +113,7 @@ export default function Contacto() {
           <div className="reveal bg-white border border-slate-200 rounded-2xl p-8" style={{ transitionDelay: "0.1s" }}>
             <h3 className="text-lg font-bold mb-1">Prefieres escribir? Déjanos tus datos</h3>
             <p className="text-sm text-slate-500 mb-6">
-              Un humano te responde — normalmente en menos de 2 horas hábiles.
+              Un humano te responde — en menos de 24 h.
             </p>
             {state === "sent" ? (
               <div className="text-center py-8">
@@ -86,11 +122,18 @@ export default function Contacto() {
                     <path d="M20 6L9 17l-5-5" />
                   </svg>
                 </div>
-                <p className="font-semibold">¡Recibido!</p>
+                <p className="font-semibold">¡WhatsApp abierto!</p>
                 <p className="text-sm text-slate-500 mt-1">
-                  Te contactamos en menos de 24 h. Si es urgente, escríbenos por
-                  WhatsApp.
+                  Tu mensaje ya está en WhatsApp. Si no se abrió, escríbenos al
+                  +58 416 535 9897.
                 </p>
+                <button
+                  type="button"
+                  onClick={() => setState("idle")}
+                  className="mt-6 text-sm font-medium text-accent hover:underline"
+                >
+                  Enviar otro mensaje
+                </button>
               </div>
             ) : (
               <form onSubmit={onSubmit} className="space-y-4">
@@ -109,6 +152,23 @@ export default function Contacto() {
                   />
                 </div>
                 <div>
+                  <label htmlFor="lead-tipo" className="block text-sm font-medium mb-1.5">
+                    ¿Qué necesitas?
+                  </label>
+                  <select
+                    id="lead-tipo"
+                    required
+                    value={tipoServicio}
+                    onChange={(e) => setTipoServicio(e.target.value)}
+                    className="w-full rounded-xl border border-slate-300 px-4 py-2.5 text-sm focus:border-accent focus:ring-1 focus:ring-accent outline-none transition-all bg-white"
+                  >
+                    <option value="" disabled>Selecciona una opción</option>
+                    {TIPO_SERVICIO.map((t) => (
+                      <option key={t} value={t}>{t}</option>
+                    ))}
+                  </select>
+                </div>
+                <div>
                   <label htmlFor="lead-contacto" className="block text-sm font-medium mb-1.5">
                     WhatsApp o email
                   </label>
@@ -124,7 +184,7 @@ export default function Contacto() {
                 </div>
                 <div>
                   <label htmlFor="lead-mensaje" className="block text-sm font-medium mb-1.5">
-                    ¿Qué necesitas?
+                    Cuéntanos más detalles
                   </label>
                   <textarea
                     id="lead-mensaje"

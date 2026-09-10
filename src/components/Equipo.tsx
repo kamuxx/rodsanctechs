@@ -26,11 +26,14 @@ export default function Equipo() {
     <section id="equipo" className="py-16 md:py-24 bg-slate-50">
       <div className="max-w-6xl mx-auto px-6">
         <h2 className="reveal text-3xl md:text-4xl font-bold tracking-tight mb-4 text-center">
-          Nuestro Equipo
+          Equipo de Desarrollo de Software
         </h2>
         <p className="reveal text-slate-500 text-lg max-w-2xl mb-14 text-center mx-auto">
           Dos fundadores con más de 9 años de experiencia cada uno, especializados
-          en sistemas de gestión y soluciones fintech.
+          en sistemas de gestión y soluciones fintech. Esa experiencia se construyó
+          dentro de empresas, como parte de sus equipos, bajo acuerdos de
+          confidencialidad (NDA): por eso aquí no verás logos de clientes ni datos
+          privados — verás cómo trabajamos y qué sabemos construir.
         </p>
         <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
           {founders.map((f) => (

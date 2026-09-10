@@ -108,6 +108,51 @@ function wait(ms: number): Promise<void> {
   });
 }
 
+/* ── Contact field validation ───────────────────────────────────────── */
+
+function isValidEmail(value: string): boolean {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim());
+}
+
+function isValidPhone(value: string): boolean {
+  const digits = value.replace(/\D/g, "");
+  return digits.length >= 8;
+}
+
+function isValidCountry(value: string): boolean {
+  return value.trim().length >= 2;
+}
+
+type ValidationResult = { ok: true } | { ok: false; error: string };
+
+function validateContactField(
+  step: ContactStep,
+  value: string,
+): ValidationResult {
+  const trimmed = value.trim();
+  switch (step) {
+    case "email":
+      if (!trimmed) return { ok: false, error: "Por favor ingresa tu correo electrónico." };
+      if (!isValidEmail(trimmed))
+        return { ok: false, error: "El correo no parece válido. Ejemplo: usuario@empresa.com" };
+      break;
+    case "whatsapp":
+      if (!trimmed) return { ok: false, error: "Por favor ingresa tu número de WhatsApp." };
+      if (!isValidPhone(trimmed))
+        return { ok: false, error: "El número debe tener al menos 8 dígitos. Ejemplo: +58 416 535 9897" };
+      break;
+    case "pais":
+      if (!trimmed) return { ok: false, error: "Por favor indica en qué país estás." };
+      if (!isValidCountry(trimmed))
+        return { ok: false, error: "Por favor escribe el nombre de tu país." };
+      break;
+    default:
+      if (!trimmed) return { ok: false, error: "Por favor completa este campo." };
+      break;
+  }
+  return { ok: true };
+}
+
 const INTENTION_IDS: readonly IntentionId[] = [
   "landing",
   "sitio-corporativo",
@@ -192,29 +237,39 @@ export function extractBrief(text: string): BriefExtract {
 /** Compila el resumen del proyecto para el handoff por WhatsApp. */
 export function compileWhatsAppLink(brief: BriefData): string {
   const L: string[] = [];
-  L.push("*Nuevo proyecto — RodSancTechs*");
+
+  L.push("Hola RodSancTechs, solicito cotización para:");
   L.push("");
-  L.push("*Descubrimiento*");
-  L.push("*Tipo:* " + (brief.projectType || "-"));
-  L.push("*Idea:* " + (brief.idea || "-"));
-  L.push("*Negocio:* " + (brief.target || "-"));
-  L.push("*Objetivo:* " + (brief.problem || "-"));
+
+  // Proyecto
+  const tipo = brief.projectType || "Proyecto";
+  L.push("📋 *" + tipo + "*");
+  L.push("");
+
+  if (brief.idea) L.push("💡 " + brief.idea);
+  if (brief.target) L.push("🎯 Negocio: " + brief.target);
+  if (brief.problem) L.push("📦 Objetivo: " + brief.problem);
   if (brief.detailLabel && brief.detailValue)
-    L.push("*" + brief.detailLabel + ":* " + brief.detailValue);
+    L.push("📊 " + brief.detailLabel + ": " + brief.detailValue);
+
+  // Alcance
+  const alcance: string[] = [];
+  if (brief.modalidad) alcance.push(brief.modalidad);
+  if (brief.timeline) alcance.push("Plazo: " + brief.timeline);
+  if (brief.urgencia) alcance.push("Urgencia: " + brief.urgencia);
+  if (brief.presupuesto) alcance.push("Presupuesto: " + brief.presupuesto);
+  if (alcance.length) {
+    L.push("");
+    L.push("⏰ " + alcance.join(" | "));
+  }
+
   L.push("");
-  L.push("*Alcance*");
-  L.push("*Complejidad:* " + (brief.complejidad || "-"));
-  L.push("*Timeline:* " + (brief.timeline || "-"));
-  L.push("*Urgencia:* " + (brief.urgencia || "-"));
-  L.push("*Presupuesto:* " + (brief.presupuesto || "-"));
-  L.push("*Modalidad:* " + (brief.modalidad || "-"));
-  L.push("");
-  L.push("*Contacto*");
-  L.push("*Nombre:* " + (brief.nombre || "-"));
-  L.push("*Email:* " + (brief.email || "-"));
-  L.push("*Empresa:* " + (brief.empresa || "-"));
-  L.push("*WhatsApp:* " + (brief.whatsapp || "-"));
-  L.push("*País:* " + (brief.pais || "-"));
+  L.push("👤 " + (brief.nombre || ""));
+  if (brief.empresa) L.push("🏢 " + brief.empresa);
+  if (brief.email) L.push("📧 " + brief.email);
+  if (brief.whatsapp) L.push("📱 " + brief.whatsapp);
+  if (brief.pais) L.push("🌎 " + brief.pais);
+
   return (
     "https://wa.me/" +
     WHATSAPP_NUMBER +
@@ -727,6 +782,13 @@ export function useChat() {
       }
 
       if (isContactStep(current)) {
+        const validation = validateContactField(current, trimmed);
+        if (!validation.ok) {
+          await speak(validation.error);
+          isProcessingRef.current = false;
+          return;
+        }
+
         const nextDraft: BriefData = {
           ...draftRef.current,
           [current]: trimmed,

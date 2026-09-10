@@ -1,6 +1,6 @@
 const links = [
   { href: "#servicios", label: "Soluciones" },
-  { href: "#demos", label: "Demos" },
+  { href: "#casos", label: "Demos" },
   { href: "#empresas", label: "Empresas" },
   { href: "#equipo", label: "Equipo" },
   { href: "#contacto", label: "Contacto" },
@@ -17,9 +17,14 @@ export default function Footer() {
             </a>
           ))}
         </nav>
-        <p className="text-xs text-slate-500">
-          &copy; 2026 RodSancTechs. Desarrolladores Full-Stack &amp; Contractors.
-        </p>
+        <div className="text-right">
+          <p className="text-xs text-slate-500">
+            &copy; 2026 RodSancTechs. Desarrollo de software a medida.
+          </p>
+          <p className="text-xs text-slate-400 mt-1">
+            Software a medida para empresas en Venezuela.
+          </p>
+        </div>
       </div>
     </footer>
   );
