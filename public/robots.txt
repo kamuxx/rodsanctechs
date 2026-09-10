@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://rodsanctechs.netlify.app/sitemap.xml
+Sitemap: https://rodsanctechs.vercel.app/sitemap.xml
