@@ -11,6 +11,8 @@ import {
   FiBriefcase,
   FiLifeBuoy,
   FiCreditCard,
+  FiSend,
+  FiUsers,
   FiGlobe,
   FiChevronDown,
 } from "react-icons/fi";
@@ -116,8 +118,7 @@ const ITEMS: FaqItem[] = [
       <>
         Trabajamos con <strong className="font-semibold text-slate-700">sistemas enterprise bajo NDA</strong>{" "}
         en Retail, Alimentos, Finanzas y Seguros, además de pymes, clínicas y
-        comercios. Tenemos demos públicas en preparación para que veas capacidades
-        reales antes de decidir.
+        comercios.
       </>
     ),
   },
@@ -133,6 +134,20 @@ const ITEMS: FaqItem[] = [
     ),
   },
   {
+    icon: FiUsers,
+    q: "¿Acompañan a nuestro equipo cuando empecemos a usar el producto?",
+    a: (
+      <>
+        Sí. No entregamos y desaparecemos: cada entrega incluye un{" "}
+        <strong className="font-semibold text-slate-700">acompañamiento inicial en el uso</strong> de
+        la solución. Guiamos a tu equipo y a tus{" "}
+        <strong className="font-semibold text-slate-700">usuarios finales</strong> durante la puesta
+        en marcha y resolvemos dudas reales de la operación, para que el producto se adopte
+        con confianza desde el primer día.
+      </>
+    ),
+  },
+  {
     icon: FiCreditCard,
     q: "¿Cómo se paga el proyecto?",
     a: (
@@ -140,6 +155,19 @@ const ITEMS: FaqItem[] = [
         Se define en la propuesta. Para proyectos grandes trabajamos{" "}
         <strong className="font-semibold text-slate-700">por hitos</strong>: avanzas por etapas y pagas
         conforme se entrega cada una. Así reduces el riesgo y ves resultados desde el inicio.
+      </>
+    ),
+  },
+  {
+    icon: FiSend,
+    q: "¿Qué métodos de pago aceptan?",
+    a: (
+      <>
+        Trabajamos con pagos en <strong className="font-semibold text-slate-700">USD</strong> y
+        aceptamos <strong className="font-semibold text-slate-700">Binance</strong>,{" "}
+        <strong className="font-semibold text-slate-700">Zinli</strong> y{" "}
+        <strong className="font-semibold text-slate-700">Mercantil Panamá</strong>. El método y la
+        forma (por hitos o completo) se definen en la propuesta según el alcance del proyecto.
       </>
     ),
   },
