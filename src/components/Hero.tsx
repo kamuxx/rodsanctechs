@@ -150,7 +150,7 @@ export default function Hero() {
             <p className="reveal text-lg md:text-xl text-slate-500 max-w-2xl mb-10" style={{ transitionDelay: "0.1s" }}>
               Tus pedidos, tu inventario y tus cobros no deberían vivir en cuadernos,
               Excel y WhatsApp. Los convertimos en un sistema a medida — ERP, CRM,
-              POS, e-commerce o plataforma financiera — y lo llevamos a producción contigo.
+              POS, e-commerce o plataforma financiera — y lo llevamos a producción listo para funcionar.
             </p>
 
             <div className="reveal flex flex-wrap gap-4" style={{ transitionDelay: "0.2s" }}>
