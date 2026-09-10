@@ -1,6 +1,6 @@
 const links = [
   { href: "#servicios", label: "Soluciones" },
-  { href: "#casos", label: "Demos" },
+  { href: "#casos", label: "Demos", hidden: true },
   { href: "#empresas", label: "Empresas" },
   { href: "#equipo", label: "Equipo" },
   { href: "#contacto", label: "Contacto" },
@@ -11,7 +11,7 @@ export default function Footer() {
     <footer className="border-t border-slate-200 py-10">
       <div className="max-w-6xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-6">
         <nav className="flex flex-wrap gap-6 text-sm text-slate-500" aria-label="Pie">
-          {links.map((l) => (
+          {links.filter((l) => !l.hidden).map((l) => (
             <a key={l.href} href={l.href} className="hover:text-slate-900 transition-colors">
               {l.label}
             </a>
