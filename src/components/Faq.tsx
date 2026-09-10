@@ -357,7 +357,7 @@ export default function Faq() {
             </div>
             <div className="flex flex-wrap items-center gap-4">
               <a
-                href="https://wa.me/584165359897?text=Hola%2C%20tengo%20una%20consulta%20sobre%20un%20proyecto"
+                href="https://wa.me/584122619542?text=Hola%2C%20tengo%20una%20consulta%20sobre%20un%20proyecto"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full font-semibold text-accent-deep bg-white hover:bg-white/90 hover:-translate-y-0.5 hover:shadow-xl transition-all"
