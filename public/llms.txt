@@ -1,0 +1,27 @@
+# RodSancTechs
+
+> RodSancTechs es un estudio de desarrollo de software orientado a pymes. Crea landing pages, sitios corporativos, blogs, ERPs a medida, puntos de venta (POS) y tiendas online que ayudan a digitalizar y automatizar la operación. El sitio presenta los servicios, las tecnologías que usa, su proceso de trabajo, ejemplos, equipo y la forma de contacto.
+
+## Servicios
+- [Landing informativa](https://rodsanctechs.vercel.app/#servicios): Una página clara para presentar la oferta y convertir visitas en contacto.
+- [Sitio corporativo](https://rodsanctechs.vercel.app/#servicios): Varias páginas para contar la empresa, servicios, equipo y contacto.
+- [Blog](https://rodsanctechs.vercel.app/#servicios): Publicar artículos, noticias o contenidos para atraer y educar.
+- [ERP a medida](https://rodsanctechs.vercel.app/#servicios): Inventario, ventas, compras y reportes en un solo sistema que crece contigo.
+- [Punto de venta (POS)](https://rodsanctechs.vercel.app/#servicios): Facturación rápida, inventario sincronizado y control de caja sin procesos manuales.
+- [Carritos de compra](https://rodsanctechs.vercel.app/#servicios): Tienda online con pagos, pedidos y stock conectados en tiempo real.
+
+## Secciones del sitio
+- [Inicio](https://rodsanctechs.vercel.app/): Presentación de la oferta.
+- [Servicios](https://rodsanctechs.vercel.app/#servicios): Oferta de desarrollo a medida.
+- [Tecnologías](https://rodsanctechs.vercel.app/#tecnologias): Stack tecnológico de los proyectos.
+- [Proceso](https://rodsanctechs.vercel.app/#proceso): Metodología de trabajo del estudio.
+- [Casos](https://rodsanctechs.vercel.app/#casos): Ejemplos y demostraciones.
+- [Empresas](https://rodsanctechs.vercel.app/#empresas): Propuesta orientada a empresas.
+- [Equipo](https://rodsanctechs.vercel.app/#equipo): Personas detrás del estudio.
+- [FAQ](https://rodsanctechs.vercel.app/#faq): Preguntas frecuentes.
+- [Contacto](https://rodsanctechs.vercel.app/#contacto): Formulario de contacto y WhatsApp.
+
+## Contacto
+- Sitio web: https://rodsanctechs.vercel.app/
+- WhatsApp: +58 412 261 9542 — https://wa.me/584122619542
+- Formulario: https://rodsanctechs.vercel.app/#contacto
