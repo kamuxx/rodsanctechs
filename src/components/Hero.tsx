@@ -139,14 +139,18 @@ export default function Hero() {
       <div className="relative max-w-6xl mx-auto px-6 py-24 md:py-32 w-full">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-8 items-center">
           <div>
+            <p className="reveal inline-flex items-center gap-2 rounded-full border border-accent/20 bg-accent/5 px-4 py-1.5 text-sm font-medium text-accent mb-4" style={{ transitionDelay: "0.05s" }}>
+              Desarrollo de software a medida
+            </p>
+
             <h1 className="reveal text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold leading-[1.05] tracking-tight max-w-4xl mb-6">
-              Sistemas que hacen <span className="text-accent">funcionar</span> tu negocio
+              Software a medida que hace <span className="text-accent">funcionar</span> tu negocio
             </h1>
 
             <p className="reveal text-lg md:text-xl text-slate-500 max-w-2xl mb-10" style={{ transitionDelay: "0.1s" }}>
-              ERP, CRM, POS, e-commerce y soluciones fintech a medida. Diseñamos,
-              construimos y llevamos tu sistema a producción — desde una
-              pastelería hasta una operación financiera.
+              Tus pedidos, tu inventario y tus cobros no deberían vivir en cuadernos,
+              Excel y WhatsApp. Los convertimos en un sistema a medida — ERP, CRM,
+              POS, e-commerce o plataforma financiera — y lo llevamos a producción contigo.
             </p>
 
             <div className="reveal flex flex-wrap gap-4" style={{ transitionDelay: "0.2s" }}>
@@ -154,12 +158,16 @@ export default function Hero() {
                 onClick={openChatWidget}
                 className="inline-flex items-center px-7 py-3.5 rounded-full text-base font-semibold text-white bg-accent shadow-lg shadow-accent/25 hover:shadow-accent/40 hover:-translate-y-0.5 transition-all cursor-pointer"
               >
-                Cuéntanos qué necesitas construir
+                Hablemos de tu proyecto
               </button>
               <a href="#servicios" className="inline-flex items-center px-7 py-3.5 rounded-full text-base font-semibold text-slate-700 border border-slate-300 hover:border-accent/50 hover:bg-accent/5 transition-all">
                 Ver soluciones
               </a>
             </div>
+
+            <p className="reveal text-sm text-slate-400 mt-4" style={{ transitionDelay: "0.25s" }}>
+              Sin compromiso.
+            </p>
 
             <div className="reveal flex flex-wrap items-center gap-x-6 gap-y-2 mt-10 text-sm text-slate-500" style={{ transitionDelay: "0.3s" }}>
               <TrustItem>9+ años de experiencia por fundador</TrustItem>

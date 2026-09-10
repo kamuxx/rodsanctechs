@@ -3,7 +3,7 @@ import { openChatWidget } from "../lib/chat-events";
 
 const links = [
   { href: "#servicios", label: "Soluciones" },
-  { href: "#demos", label: "Demos" },
+  { href: "#casos", label: "Demos" },
   { href: "#empresas", label: "Empresas" },
   { href: "#equipo", label: "Equipo" },
   { href: "#contacto", label: "Contacto" },
@@ -29,7 +29,7 @@ export default function Navbar() {
       }`}
     >
       <div className="max-w-6xl mx-auto px-6 h-20 flex items-center justify-between">
-        <a href="#hero" aria-label="Inicio" className="flex items-center gap-3">
+        <a href="/" aria-label="Inicio" className="flex items-center gap-3">
           <svg
             className="w-9 h-9"
             viewBox="0 0 40 40"

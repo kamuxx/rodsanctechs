@@ -23,11 +23,12 @@ export default function Empresas() {
     <section id="empresas" className="py-16 md:py-24 bg-slate-50">
       <div className="max-w-6xl mx-auto px-6">
         <h2 className="reveal text-3xl md:text-4xl font-bold tracking-tight mb-4">
-          Disponibles para Empresas
+          Desarrollo de Software para tu Empresa
         </h2>
         <p className="reveal text-slate-500 text-lg max-w-2xl mb-14" style={{ transitionDelay: "0.1s" }}>
-          ¿Tu empresa necesita refuerzo técnico? Trabajamos como contractors o
-          freelancers integrándonos directamente en tu equipo de desarrollo.
+          ¿Tu empresa necesita ampliar su equipo o sumar un sistema completo? Como
+          estudio de software a medida nos integramos a tu operación: refuerzo
+          dedicado o proyectos asumidos de punta a punta.
         </p>
 
         <div className="grid sm:grid-cols-2 gap-6">
@@ -39,7 +40,7 @@ export default function Empresas() {
                 <path d="M7 8l3 3-3 3M13 14h4" />
               </svg>
             </div>
-            <h3 className="text-xl font-bold mb-3">Fullstack Developer</h3>
+            <h3 className="text-xl font-bold mb-3">Equipo de desarrollo dedicado</h3>
             <p className="text-sm text-slate-500 mb-5 leading-relaxed">
               Nos integramos en tu equipo para desarrollar features completas: API,
               base de datos, UI y deploy. Comunicación directa, entregas
@@ -69,10 +70,11 @@ export default function Empresas() {
                 <path d="M10 6h4M10 18h8" />
               </svg>
             </div>
-            <h3 className="text-xl font-bold mb-3">Backend Developer</h3>
+            <h3 className="text-xl font-bold mb-3">Proyecto llave en mano</h3>
             <p className="text-sm text-slate-500 mb-5 leading-relaxed">
-              APIs robustas, microservicios escalables, migración de bases de datos,
-              optimización de consultas y arquitectura de sistemas distribuidos.
+              Asumimos tu sistema de principio a fin, con una base backend sólida:
+              APIs robustas, datos bien modelados y una arquitectura pensada para
+              crecer sin reescribir.
             </p>
             <ul className="space-y-2 mb-6">
               {backendPerks.map((p) => (

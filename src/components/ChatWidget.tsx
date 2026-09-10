@@ -341,7 +341,7 @@ export default function ChatWidget() {
                 {BOT_NAME} · RodSancTechs
               </p>
               <p className="text-xs text-white/80 leading-tight">
-                Responde en menos de 24 h · típicamente en 1-2 h
+                Responde en menos de 24 h
               </p>
             </div>
             <button
@@ -474,6 +474,11 @@ export default function ChatWidget() {
                         href={waLink}
                         target="_blank"
                         rel="noopener noreferrer"
+                        onClick={() => {
+                          setTimeout(() => {
+                            handleReset();
+                          }, 500);
+                        }}
                         className="flex items-center justify-center gap-2 w-full py-2.5 rounded-full font-semibold text-white bg-[#25D366] hover:opacity-95 transition-opacity text-sm"
                       >
                         <WhatsAppIcon className="w-4 h-4" />
