@@ -1,6 +1,6 @@
 # SEO Strategy — RodSancTechs Landing
 
-> Fase 0 (MT-00/MT-01/MT-02). Dominio canónico: `https://rodsanctechs.netlify.app`.
+> Fase 0 (MT-00/MT-01/MT-02). Dominio canónico: `https://rodsanctechs.vercel.app`.
 > Posicionamiento: estudio/empresa de soluciones de software a medida (NO freelance/contractor).
 
 ## 1. Objetivo
@@ -61,7 +61,7 @@ Posicionar a RodSancTechs como proveedor de **servicios de desarrollo de softwar
 
 ## 7. Bloqueado hasta Fase 0 completa
 
-- Canonical/og:url/sitemap: dependen de MT-00 → ya resuelto (`https://rodsanctechs.netlify.app`).
+- Canonical/og:url/sitemap: dependen de MT-00 → ya resuelto (`https://rodsanctechs.vercel.app`).
 - Long tail de casos: NO aplica casos de clientes. Restricción confirmada (MT-03): todo el trabajo previo fue como empleado bajo NDA → no es público ni propiedad de la marca. Sustitución decidida: **demos públicas propias** (productos de demostración con IP propia, ej. Gestión de Pastelería, Panel de Préstamos) presentadas con narrativa de caso pero etiquetadas como demo, NUNCA como trabajo de cliente. Secuencia: las demos se construyen POST-lanzamiento; la landing publica estado honesto "en preparación" y el CTA de casos se restaura cuando existan demos reales. Trust signals permitidas (si son reales): "sistemas enterprise bajo NDA", sectores genéricos (Retail · Alimentos · Finanzas · Seguros), años de experiencia.
 
 ## Métricas de éxito (definidas en fase verificación)

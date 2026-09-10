@@ -83,7 +83,7 @@ export type ChatStep =
   | "pais"
   | "closed";
 
-export const WHATSAPP_NUMBER = "584165359897";
+export const WHATSAPP_NUMBER = "584122619542";
 
 const STORAGE_KEY = "rst_chat_state_v3";
 
@@ -139,7 +139,7 @@ function validateContactField(
     case "whatsapp":
       if (!trimmed) return { ok: false, error: "Por favor ingresa tu número de WhatsApp." };
       if (!isValidPhone(trimmed))
-        return { ok: false, error: "El número debe tener al menos 8 dígitos. Ejemplo: +58 416 535 9897" };
+        return { ok: false, error: "El número debe tener al menos 8 dígitos. Ejemplo: +58 412 261 9542" };
       break;
     case "pais":
       if (!trimmed) return { ok: false, error: "Por favor indica en qué país estás." };
