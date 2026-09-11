@@ -11,6 +11,7 @@ import {
   type IntentionId,
 } from "../lib/faq_brief_questions";
 import { saveLead } from "../lib/saveLead";
+import { CHAT_STORAGE_KEY } from "../lib/chat-storage";
 import { BOT_NAME } from "../lib/systemprompt";
 
 export type ChatAction = {
@@ -84,8 +85,6 @@ export type ChatStep =
   | "closed";
 
 export const WHATSAPP_NUMBER = "584122619542";
-
-const STORAGE_KEY = "rst_chat_state_v3";
 
 const GREET_MESSAGE =
   "¡Hola! Te damos la bienvenida a RodSancTechs. Elige la solución que mejor describe lo que necesitas:";
@@ -424,7 +423,7 @@ function isContactStep(step: ChatStep): step is ContactStep {
 
 function loadState(): PersistedState | null {
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
+    const raw = localStorage.getItem(CHAT_STORAGE_KEY);
     if (!raw) return null;
     const parsed = JSON.parse(raw) as PersistedState;
     if (!Array.isArray(parsed.messages)) return null;
@@ -511,7 +510,7 @@ export function useChat() {
   /* Sincronización multi-pestaña */
   useEffect(() => {
     const handleStorage = (e: StorageEvent) => {
-      if (e.key !== STORAGE_KEY || !e.newValue) return;
+      if (e.key !== CHAT_STORAGE_KEY || !e.newValue) return;
       try {
         const parsed = JSON.parse(e.newValue) as PersistedState;
         if (!Array.isArray(parsed.messages) || !isChatStep(parsed.step)) return;
@@ -562,7 +561,7 @@ export function useChat() {
         intentionId: intentionIdRef.current,
         briefClosed,
       };
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      localStorage.setItem(CHAT_STORAGE_KEY, JSON.stringify(state));
     } catch {
       /* storage full or unavailable — non-blocking */
     }
@@ -826,7 +825,7 @@ export function useChat() {
     setTyping(false);
 
     try {
-      localStorage.removeItem(STORAGE_KEY);
+      localStorage.removeItem(CHAT_STORAGE_KEY);
     } catch {
       /* ignore */
     }
