@@ -88,6 +88,11 @@ body {
   transform: scaleX(1);
 }
 
+/* FAQ: mantiene la línea de acento visible mientras la tarjeta está abierta */
+.card-accent.is-open::before {
+  transform: scaleX(1);
+}
+
 /* ===== WhatsApp doodle background (original, inspired pattern) ===== */
 .wa-pattern {
   background-color: #ece5dd;

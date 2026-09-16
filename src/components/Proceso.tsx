@@ -2,22 +2,22 @@ const steps = [
   {
     n: "1",
     title: "Descubrimiento",
-    desc: "Entendemos tu negocio, objetivos y necesidades técnicas en una consulta inicial gratuita.",
+    desc: "Entendemos tu negocio antes de escribir una línea de código, para construir lo que resuelve tu operación — no lo que asumimos que necesitas.",
   },
   {
     n: "2",
     title: "Arquitectura",
-    desc: "Diseñamos la solución: modelo de datos, integraciones y plan de entregas por sprints.",
+    desc: "Diseñamos una base sólida: modelo de datos, integraciones y plan por sprints, para que el sistema crezca contigo sin reescribirse.",
   },
   {
     n: "3",
     title: "Desarrollo",
-    desc: "Construimos con entregas incrementales y demos cada sprint para que veas avance real.",
+    desc: "Construimos con entregas incrementales y demos cada sprint, para que veas avance real y ajustes a tiempo, sin sorpresas al final.",
   },
   {
     n: "4",
     title: "Despliegue y soporte",
-    desc: "Llevamos tu sistema a producción y te acompañamos con mantenimiento continuo.",
+    desc: "Llevamos tu sistema a producción y te acompañamos con mantenimiento continuo, para que siga funcionando cuando tu negocio crece.",
   },
 ];
 
@@ -26,11 +26,11 @@ export default function Proceso() {
     <section id="proceso" className="py-16 md:py-24 bg-slate-50">
       <div className="max-w-6xl mx-auto px-6">
         <h2 className="reveal text-3xl md:text-4xl font-bold tracking-tight mb-4">
-          Cómo trabajamos
+          Proceso de Desarrollo de Software a Medida
         </h2>
         <p className="reveal text-slate-500 text-lg max-w-2xl mb-14" style={{ transitionDelay: "0.1s" }}>
-          Un proceso claro y transparente, sin sorpresas. Sabrás en todo momento
-          qué estamos construyendo.
+          Un proceso de desarrollo de software claro y transparente, sin sorpresas.
+          Sabrás en todo momento qué estamos construyendo.
         </p>
         <div className="relative">
           <div className="hidden lg:block absolute top-10 left-[12.5%] right-[12.5%] h-px bg-slate-200" aria-hidden="true" />

@@ -1,11 +1,11 @@
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
 import Soluciones from "./components/Soluciones";
-import Demos from "./components/Demos";
 import Proceso from "./components/Proceso";
 import Equipo from "./components/Equipo";
 import Empresas from "./components/Empresas";
 import Tecnologias from "./components/Tecnologias";
+import Faq from "./components/Faq";
 import Contacto from "./components/Contacto";
 import Footer from "./components/Footer";
 import ChatWidget from "./components/ChatWidget";
@@ -20,11 +20,11 @@ export default function App() {
       <main>
         <Hero />
         <Soluciones />
-        <Demos />
         <Proceso />
         <Equipo />
         <Empresas />
         <Tecnologias />
+        <Faq />
         <Contacto />
       </main>
       <Footer />

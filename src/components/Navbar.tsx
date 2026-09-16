@@ -3,7 +3,7 @@ import { openChatWidget } from "../lib/chat-events";
 
 const links = [
   { href: "#servicios", label: "Soluciones" },
-  { href: "#demos", label: "Demos" },
+  { href: "#casos", label: "Demos", hidden: true },
   { href: "#empresas", label: "Empresas" },
   { href: "#equipo", label: "Equipo" },
   { href: "#contacto", label: "Contacto" },
@@ -29,7 +29,7 @@ export default function Navbar() {
       }`}
     >
       <div className="max-w-6xl mx-auto px-6 h-20 flex items-center justify-between">
-        <a href="#hero" aria-label="Inicio" className="flex items-center gap-3">
+        <a href="/" aria-label="Inicio" className="flex items-center gap-3">
           <svg
             className="w-9 h-9"
             viewBox="0 0 40 40"
@@ -49,7 +49,7 @@ export default function Navbar() {
         </a>
 
         <nav className="hidden md:flex items-center gap-8" aria-label="Principal">
-          {links.map((l) => (
+          {links.filter((l) => !l.hidden).map((l) => (
             <a
               key={l.href}
               href={l.href}
@@ -83,7 +83,7 @@ export default function Navbar() {
       {open && (
         <div id="mobileMenu" className="md:hidden border-t border-slate-200 bg-white/95 backdrop-blur-xl">
           <nav className="flex flex-col px-6 py-4 gap-1" aria-label="Móvil">
-            {links.map((l) => (
+          {links.filter((l) => !l.hidden).map((l) => (
               <a
                 key={l.href}
                 href={l.href}

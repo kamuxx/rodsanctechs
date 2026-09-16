@@ -102,11 +102,11 @@ export default function Soluciones() {
     <section id="servicios" className="py-16 md:py-24">
       <div className="max-w-6xl mx-auto px-6">
         <h2 className="reveal text-3xl md:text-4xl font-bold tracking-tight mb-4">
-          Soluciones que entendemos a fondo
+          Sistemas de Gestión a Medida: ERP, CRM y POS
         </h2>
         <p className="reveal text-slate-500 text-lg max-w-2xl mb-14" style={{ transitionDelay: "0.1s" }}>
-          Dos líneas de trabajo: sistemas de gestión para negocios en crecimiento y
-          soluciones fintech para operaciones complejas.
+          Hacemos desarrollo de software a medida en dos líneas de trabajo: sistemas de gestión
+          para negocios en crecimiento y soluciones fintech para operaciones complejas.
         </p>
 
         <div className="grid lg:grid-cols-2 gap-6 items-start">
@@ -140,30 +140,31 @@ export default function Soluciones() {
 
           {/* Carril 2: Fintech */}
           <div className="reveal" style={{ transitionDelay: "0.1s" }}>
-            <div className="bg-accent text-white rounded-2xl overflow-hidden">
-              <div className="px-8 py-6 border-b border-white/15">
+            <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden">
+              <div className="h-1 bg-gradient-to-r from-accent to-cyan" />
+              <div className="px-8 py-6 border-b border-slate-200 bg-slate-50">
                 <h3 className="text-xl font-bold">Soluciones Fintech & Seguros</h3>
-                <p className="text-sm text-accent-light mt-1">Para operaciones financieras que exigen precisión.</p>
+                <p className="text-sm text-slate-500 mt-1">Para operaciones financieras que exigen precisión.</p>
               </div>
-              <div className="divide-y divide-white/10">
+              <div className="divide-y divide-slate-100">
                 {fintechServices.map((s) => (
                   <div key={s.title} className="px-8 py-5 flex gap-4 items-start">
-                    <svg className="w-6 h-6 text-accent-light mt-0.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                    <svg className="w-6 h-6 text-accent mt-0.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                       {s.icon}
                     </svg>
                     <div>
                       <h4 className="font-semibold">{s.title}</h4>
-                      <p className="text-sm text-accent-light mt-0.5 leading-relaxed">{s.desc}</p>
+                      <p className="text-sm text-slate-500 mt-0.5 leading-relaxed">{s.desc}</p>
                     </div>
                   </div>
                 ))}
               </div>
-              <div className="px-8 py-5 bg-accent-deep">
-                <p className="text-xs text-accent-light leading-relaxed">
+              <div className="px-8 py-5 bg-slate-50">
+                <p className="text-xs text-slate-500 leading-relaxed">
                   Construidos bajo contratos NDA para el sector financiero. Agenda
                   una llamada y te mostramos cómo trabajamos.
                 </p>
-                <button onClick={openChatWidget} className="inline-flex items-center gap-2 text-sm font-semibold text-white hover:text-accent-light transition-colors mt-3 cursor-pointer">
+                <button onClick={openChatWidget} className="inline-flex items-center gap-2 text-sm font-semibold text-accent hover:text-accent-deep transition-colors mt-3 cursor-pointer">
                   Hablemos de tu proyecto <Arrow />
                 </button>
               </div>
