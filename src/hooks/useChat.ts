@@ -159,6 +159,7 @@ const INTENTION_IDS: readonly IntentionId[] = [
   "erp",
   "pos",
   "ecommerce",
+  "app-movil",
   "gestion-pasteleria",
   "fintech-prestamos",
   "fintech-inversiones",

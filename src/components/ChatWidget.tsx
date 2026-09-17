@@ -1,6 +1,6 @@
 import { lazy, Suspense, useCallback, useEffect, useState } from "react";
 import { CHAT_OPEN_EVENT } from "../lib/chat-events";
-import { hasCompletedBrief } from "../lib/chat-storage";
+import { clearChatState, hasCompletedBrief } from "../lib/chat-storage";
 import { BOT_NAME } from "../lib/systemprompt";
 import { WhatsAppIcon } from "./chat-icons";
 
@@ -27,6 +27,7 @@ function ChatPanelFallback() {
 export default function ChatWidget() {
   const [open, setOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [session, setSession] = useState(0);
   const [bubbleDismissed, setBubbleDismissed] = useState(false);
   const [hasBrief, setHasBrief] = useState(false);
 
@@ -39,6 +40,10 @@ export default function ChatWidget() {
     const onOpen = () => {
       setMounted(true);
       setOpen(true);
+      // Cada apertura (enlaces, CTAs) reinicia la conversación:
+      // se borra el progreso persistido y se remonta el panel fresco.
+      clearChatState();
+      setSession((s) => s + 1);
     };
     window.addEventListener(CHAT_OPEN_EVENT, onOpen);
     return () => window.removeEventListener(CHAT_OPEN_EVENT, onOpen);
@@ -47,6 +52,9 @@ export default function ChatWidget() {
   const openPanel = useCallback(() => {
     setMounted(true);
     setOpen(true);
+    // El botón flotante también abre conversación nueva.
+    clearChatState();
+    setSession((s) => s + 1);
   }, []);
 
   const closePanel = useCallback(() => setOpen(false), []);
@@ -87,10 +95,10 @@ export default function ChatWidget() {
         </div>
       )}
 
-      {/* Chat panel — loaded on first interaction and kept mounted afterwards */}
+      {/* Chat panel — loaded on first interaction; key remounts it fresh per session */}
       {mounted && (
         <Suspense fallback={<ChatPanelFallback />}>
-          <ChatPanel open={open} onClose={closePanel} onBriefChange={handleBriefChange} />
+          <ChatPanel key={session} open={open} onClose={closePanel} onBriefChange={handleBriefChange} />
         </Suspense>
       )}
     </>

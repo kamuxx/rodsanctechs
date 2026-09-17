@@ -11,6 +11,7 @@ export type IntentionId =
   | "erp"
   | "pos"
   | "ecommerce"
+  | "app-movil"
   | "gestion-pasteleria"
   | "fintech-prestamos"
   | "fintech-inversiones"
@@ -271,6 +272,16 @@ const ECOMMERCE_MODALIDAD: ClosingList = {
     { id: "nueva", title: "Tienda nueva" },
     { id: "migrar", title: "Mejorar o migrar la tienda actual" },
     { id: "conectar", title: "Conectar catálogo, pagos o stock con lo que ya usan" },
+    OTROS,
+  ],
+};
+
+const APP_MODALIDAD: ClosingList = {
+  prompt: "¿Cómo quieren la aplicación móvil?",
+  options: [
+    { id: "nueva", title: "App nueva desde cero" },
+    { id: "mejorar", title: "Mejorar o rehacer la actual" },
+    { id: "web-a-app", title: "Convertir su web o sistema en app" },
     OTROS,
   ],
 };
@@ -665,6 +676,68 @@ const INTENTIONS: Record<IntentionId, IntentionFaq> = {
       ...closingSteps("ecommerce", ECOMMERCE_MODALIDAD, OPS_TIMELINE),
     ],
   },
+  "app-movil": {
+    id: "app-movil",
+    projectType: "Aplicación móvil",
+    pillLabel: "Aplicación móvil",
+    description: "Pedidos, reservas y notificaciones en el bolsillo del cliente.",
+    steps: [
+      {
+        id: "app-vertical",
+        prompt: "¿Para qué tipo de negocio es la app?",
+        mapsTo: "detailValue",
+        detailLabel: "Caso de uso",
+        choice: "radio",
+        options: [
+          { id: "restaurante", title: "Restaurante (menú, reservas, delivery)" },
+          { id: "delivery", title: "Delivery y logística" },
+          { id: "marketplace", title: "Marketplace (comprar y vender)" },
+          { id: "fintech", title: "Pagos y finanzas" },
+          { id: "gestion", title: "Gestión del negocio (caja, stock, personal)" },
+          OTROS,
+        ],
+      },
+      {
+        id: "app-problem",
+        prompt: "¿Qué necesita hacer la app?",
+        mapsTo: "problem",
+        choice: "check",
+        options: [
+          { id: "pedidos", title: "Pedidos o reservas" },
+          { id: "pagos", title: "Pagos" },
+          { id: "seguimiento", title: "Seguimiento en vivo" },
+          { id: "notificaciones", title: "Notificaciones" },
+          OTROS,
+        ],
+      },
+      {
+        id: "app-target",
+        prompt: "¿Quiénes usarían la app?",
+        mapsTo: "target",
+        choice: "check",
+        options: [
+          { id: "clientes", title: "Clientes finales" },
+          { id: "equipo", title: "Equipo interno" },
+          { id: "campo", title: "Repartidores o personal en campo" },
+          OTROS,
+        ],
+      },
+      {
+        id: "app-platform",
+        prompt: "¿En qué plataforma debe salir primero?",
+        mapsTo: "detailValue",
+        detailLabel: "Plataforma inicial",
+        choice: "radio",
+        options: [
+          { id: "android", title: "Android" },
+          { id: "ios", title: "iOS" },
+          { id: "ambas", title: "Ambas a la vez" },
+          OTROS,
+        ],
+      },
+      ...closingSteps("app", APP_MODALIDAD, SYSTEM_TIMELINE),
+    ],
+  },
   "gestion-pasteleria": {
     id: "gestion-pasteleria",
     projectType: "Gestión pastelería/tienda",
@@ -867,6 +940,7 @@ const INTENTION_ORDER = [
   "erp",
   "pos",
   "ecommerce",
+  "app-movil",
   "gestion-pasteleria",
   "fintech-prestamos",
   "fintech-inversiones",
