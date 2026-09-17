@@ -177,9 +177,11 @@ type ChatPanelProps = {
   open: boolean;
   onClose: () => void;
   onBriefChange: (hasBrief: boolean) => void;
+  /** Pill preseleccionada (deep-link desde una card). Solo se consume una vez. */
+  initialPillLabel?: string | null;
 };
 
-export default function ChatPanel({ open, onClose, onBriefChange }: ChatPanelProps) {
+export default function ChatPanel({ open, onClose, onBriefChange, initialPillLabel }: ChatPanelProps) {
   const {
     messages,
     typing,
@@ -199,13 +201,22 @@ export default function ChatPanel({ open, onClose, onBriefChange }: ChatPanelPro
   const bodyRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const firstOpen = useRef(true);
+  const pendingPill = useRef<string | null>(initialPillLabel ?? null);
 
   useEffect(() => {
-    if (open && firstOpen.current) {
-      firstOpen.current = false;
-      start();
-    }
-  }, [open, start]);
+    if (!open || !firstOpen.current) return;
+    firstOpen.current = false;
+    void (async () => {
+      await start();
+      // Deep-link: si se abrió desde una card, selecciona su intención
+      // en el saludo. Intención inválida = se ignora, sigue el saludo normal.
+      if (pendingPill.current) {
+        const pill = pendingPill.current;
+        pendingPill.current = null;
+        await selectChip(pill);
+      }
+    })();
+  }, [open, start, selectChip]);
 
   // Keep the launcher in sync so the invitation bubble hides once a brief exists.
   useEffect(() => {

@@ -1,12 +1,25 @@
-import { openChatWidget } from "../lib/chat-events";
+import { useState } from "react";
+import { track } from "../lib/analytics";
+import { openChatWidget, openChatWithIntention } from "../lib/chat-events";
+import { getIntention } from "../lib/faq_brief_questions";
 import { fintechServices, pymeServices } from "./soluciones-data";
-import type { Service } from "./soluciones-data";
+import type { Service, ServiceGroup } from "./soluciones-data";
 
 /**
  * Sección #servicios: dos bloques apilados con grilla compacta de cards
- * parejas (los carriles implicaban una equivalencia falsa 12 vs 3).
- * Copy y datos en ./soluciones-data.
+ * clicables (cada card abre el chat con su intención preseleccionada).
+ * Filtro anti-parálisis: Todos / Web y móvil / Operación / Fintech.
+ * Copy y datos en ./soluciones-data (títulos exactos del guard).
  */
+
+type Filter = "all" | ServiceGroup;
+
+const FILTERS: readonly { id: Filter; label: string }[] = [
+  { id: "all", label: "Todos" },
+  { id: "web", label: "Web y móvil" },
+  { id: "operacion", label: "Operación" },
+  { id: "fintech", label: "Fintech" },
+];
 
 function Arrow({ className = "w-4 h-4" }: { className?: string }) {
   return (
@@ -25,10 +38,18 @@ function Arrow({ className = "w-4 h-4" }: { className?: string }) {
   );
 }
 
+function openServiceChat(service: Service) {
+  track("servicios_card_click", { intent: service.intent });
+  openChatWithIntention(getIntention(service.intent).pillLabel);
+}
+
 function ServiceCard({ service, index }: { service: Service; index: number }) {
   return (
-    <div
-      className="reveal bg-white border border-slate-200 rounded-2xl p-6 h-full hover:shadow-xl hover:shadow-accent/10 hover:border-accent/30 transition-all duration-300 cursor-pointer"
+    <button
+      type="button"
+      onClick={() => openServiceChat(service)}
+      aria-label={`${service.title}: cotizar por chat`}
+      className="reveal bg-white border border-slate-200 rounded-2xl p-6 h-full text-left hover:shadow-xl hover:shadow-accent/10 hover:border-accent/30 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent transition-all duration-300 cursor-pointer"
       style={{ transitionDelay: `${Math.min(index, 5) * 0.05}s` }}
     >
       <svg
@@ -43,82 +64,126 @@ function ServiceCard({ service, index }: { service: Service; index: number }) {
       >
         {service.icon}
       </svg>
-      <h4 className="font-semibold mt-4">{service.title}</h4>
-      <p className="text-sm text-slate-500 mt-1 leading-relaxed">
+      <span className="block font-semibold mt-4">{service.title}</span>
+      <span className="block text-sm text-slate-500 mt-1 leading-relaxed">
         {service.desc}
-      </p>
-    </div>
+      </span>
+      <span className="mt-3 inline-flex items-center gap-1.5 text-sm font-semibold text-accent">
+        Cotizar <Arrow className="w-3.5 h-3.5" />
+      </span>
+    </button>
   );
 }
 
 export default function Soluciones() {
+  const [filter, setFilter] = useState<Filter>("all");
+
+  const matches = (service: Service) => filter === "all" || service.group === filter;
+  const visiblePyme = pymeServices.filter(matches);
+  const visibleFintech = fintechServices.filter(matches);
+  const showPyme = visiblePyme.length > 0;
+  const showFintech = visibleFintech.length > 0;
+
+  const pick = (id: Filter) => {
+    setFilter(id);
+    track("servicios_filter", { group: id });
+  };
+
   return (
     <section id="servicios" className="py-16 md:py-24 bg-slate-50">
       <div className="max-w-6xl mx-auto px-6">
         <h2 className="reveal text-3xl md:text-4xl font-bold tracking-tight mb-4">
-          Sistemas de Gestión a Medida: ERP, CRM y POS
+          Software a medida para operar tu negocio
         </h2>
         <p
-          className="reveal text-slate-500 text-lg max-w-2xl mb-14"
+          className="reveal text-slate-500 text-lg max-w-2xl mb-8"
           style={{ transitionDelay: "0.1s" }}
         >
-          Hacemos desarrollo de software a medida en dos líneas de trabajo:
-          sistemas de gestión para negocios en crecimiento y soluciones fintech
-          para operaciones complejas.
+          Desarrollo de software a medida en tres líneas: presencia web,
+          operación del negocio y soluciones fintech. Elige la tuya y la
+          cotizamos en menos de 24 h.
         </p>
 
-        {/* Bloque 1: negocio */}
-        <div>
-          <div className="reveal flex items-baseline gap-3 mb-6">
-            <h3 className="text-xl font-bold">Soluciones para tu negocio</h3>
-            <span className="text-sm text-slate-500">
-              {pymeServices.length} soluciones
-            </span>
-          </div>
-          <p className="reveal text-sm text-slate-500 -mt-4 mb-6">
-            Para comercios y PYMEs que necesitan orden y control.
-          </p>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {pymeServices.map((s, i) => (
-              <ServiceCard key={s.title} service={s} index={i} />
-            ))}
-          </div>
-          <button
-            onClick={openChatWidget}
-            className="reveal inline-flex items-center gap-2 text-sm font-semibold text-accent hover:text-accent-deep transition-colors mt-6 cursor-pointer"
-          >
-            Cuéntanos qué necesitas <Arrow />
-          </button>
+        <div
+          className="reveal flex flex-wrap gap-2 mb-10"
+          role="group"
+          aria-label="Filtrar soluciones"
+          style={{ transitionDelay: "0.15s" }}
+        >
+          {FILTERS.map((f) => (
+            <button
+              key={f.id}
+              type="button"
+              onClick={() => pick(f.id)}
+              aria-pressed={filter === f.id}
+              className={`px-4 py-2 rounded-full text-sm font-semibold border transition-all focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent ${
+                filter === f.id
+                  ? "bg-accent text-white border-accent shadow-md shadow-accent/25"
+                  : "bg-white text-slate-600 border-slate-300 hover:border-accent/50 hover:text-accent-deep"
+              }`}
+            >
+              {f.label}
+            </button>
+          ))}
         </div>
 
+        {/* Bloque 1: negocio */}
+        {showPyme && (
+          <div>
+            <div className="reveal flex items-baseline gap-3 mb-6">
+              <h3 className="text-xl font-bold">Soluciones para tu negocio</h3>
+            </div>
+            <p className="reveal text-sm text-slate-500 -mt-4 mb-6">
+              Para comercios y PYMEs que necesitan orden y control. Toca una
+              tarjeta y cotízala directo por chat.
+            </p>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {visiblePyme.map((s, i) => (
+                <ServiceCard key={s.title} service={s} index={i} />
+              ))}
+            </div>
+            <button
+              onClick={openChatWidget}
+              className="reveal inline-flex items-center gap-2 text-sm font-semibold text-accent hover:text-accent-deep transition-colors mt-6 cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+            >
+              Cuéntanos qué necesitas <Arrow />
+            </button>
+            <p className="reveal text-xs text-slate-400 mt-2">
+              Sin compromiso · Respuesta en menos de 24 h.
+            </p>
+          </div>
+        )}
+
         {/* Bloque 2: fintech */}
-        <div className="mt-16">
-          <div className="h-1 bg-gradient-to-r from-accent to-cyan rounded-full mb-6" />
-          <div className="reveal flex items-baseline gap-3 mb-6">
-            <h3 className="text-xl font-bold">Soluciones Fintech & Seguros</h3>
-            <span className="text-sm text-slate-500">
-              {fintechServices.length} soluciones
-            </span>
+        {showFintech && (
+          <div className={showPyme ? "mt-16" : ""}>
+            <div className="h-1 bg-gradient-to-r from-accent to-cyan rounded-full mb-6" />
+            <div className="reveal flex items-baseline gap-3 mb-6">
+              <h3 className="text-xl font-bold">Soluciones Fintech & Seguros</h3>
+            </div>
+            <p className="reveal text-sm text-slate-500 -mt-4 mb-6">
+              Para operaciones financieras que exigen precisión.
+            </p>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {visibleFintech.map((s, i) => (
+                <ServiceCard key={s.title} service={s} index={i} />
+              ))}
+            </div>
+            <p className="reveal text-xs text-slate-500 leading-relaxed mt-6 max-w-2xl">
+              Construidos bajo contratos NDA para el sector financiero. Agenda una
+              llamada y te mostramos cómo trabajamos.
+            </p>
+            <button
+              onClick={openChatWidget}
+              className="reveal inline-flex items-center gap-2 text-sm font-semibold text-accent hover:text-accent-deep transition-colors mt-3 cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+            >
+              Hablemos de tu proyecto <Arrow />
+            </button>
+            <p className="reveal text-xs text-slate-400 mt-2">
+              Sin compromiso · Respuesta en menos de 24 h.
+            </p>
           </div>
-          <p className="reveal text-sm text-slate-500 -mt-4 mb-6">
-            Para operaciones financieras que exigen precisión.
-          </p>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {fintechServices.map((s, i) => (
-              <ServiceCard key={s.title} service={s} index={i} />
-            ))}
-          </div>
-          <p className="reveal text-xs text-slate-500 leading-relaxed mt-6 max-w-2xl">
-            Construidos bajo contratos NDA para el sector financiero. Agenda una
-            llamada y te mostramos cómo trabajamos.
-          </p>
-          <button
-            onClick={openChatWidget}
-            className="reveal inline-flex items-center gap-2 text-sm font-semibold text-accent hover:text-accent-deep transition-colors mt-3 cursor-pointer"
-          >
-            Hablemos de tu proyecto <Arrow />
-          </button>
-        </div>
+        )}
       </div>
     </section>
   );

@@ -1,16 +1,12 @@
 import { useRef, useState } from "react";
+import { PILL_LABELS } from "../lib/faq_brief_questions";
 import { saveLead } from "../lib/saveLead";
 import { track } from "../lib/analytics";
 
 type FormState = "idle" | "sending" | "sent" | "error";
 
-const TIPO_SERVICIO = [
-  "Nuevo proyecto",
-  "Rediseño de uno actual",
-  "Mantenimiento de solución existente",
-  "Integración con otros sistemas",
-  "Otro",
-] as const;
+/** Mismo idioma que las cards y el chat: las 15 intenciones + salida libre. */
+const TIPO_SERVICIO: readonly string[] = [...PILL_LABELS, "Otro"];
 
 const EMAIL_USER = "lesterrodriguez3101";
 const EMAIL_DOMAIN = "gmail.com";
@@ -31,18 +27,11 @@ export default function Contacto() {
 
   const buildWhatsAppUrl = () => {
     const phone = "584122619542";
-    const ACCIONES: Record<string, string> = {
-      "Nuevo proyecto": "Necesito desarrollar un nuevo proyecto",
-      "Rediseño de uno actual": "Necesito rediseñar un proyecto existente",
-      "Mantenimiento de solución existente": "Necesito ayuda con el mantenimiento de una solución",
-      "Integración con otros sistemas": "Necesito integrar sistemas",
-      Otro: "Tengo una necesidad especial",
-    };
     const detalle = mensaje.trim();
     const accion = detalle
       ? ""
       : tipoServicio
-        ? `${ACCIONES[tipoServicio] ?? "Tengo un proyecto"}. `
+        ? `${tipoServicio === "Otro" ? "Tengo una necesidad especial" : `Necesito: ${tipoServicio}`}. `
         : "";
     const text = encodeURIComponent(
       `Hola, mi nombre es ${nombre.trim()}. ${accion}${detalle}. ¿Podemos conversar?`

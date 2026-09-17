@@ -1,6 +1,7 @@
 import { lazy, Suspense, useCallback, useEffect, useState } from "react";
-import { CHAT_OPEN_EVENT } from "../lib/chat-events";
+import { CHAT_OPEN_EVENT, type ChatOpenDetail } from "../lib/chat-events";
 import { clearChatState, hasCompletedBrief } from "../lib/chat-storage";
+import { track } from "../lib/analytics";
 import { BOT_NAME } from "../lib/systemprompt";
 import { WhatsAppIcon } from "./chat-icons";
 
@@ -28,6 +29,7 @@ export default function ChatWidget() {
   const [open, setOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [session, setSession] = useState(0);
+  const [pendingPill, setPendingPill] = useState<string | null>(null);
   const [bubbleDismissed, setBubbleDismissed] = useState(false);
   const [hasBrief, setHasBrief] = useState(false);
 
@@ -37,24 +39,28 @@ export default function ChatWidget() {
   }, []);
 
   useEffect(() => {
-    const onOpen = () => {
+    const onOpen = (event: Event) => {
+      const pill = (event as CustomEvent<ChatOpenDetail>).detail?.intentionPill;
+      if (pill) {
+        // Intención explícita (una card de Soluciones): conversación nueva
+        // con esa intención preseleccionada.
+        clearChatState();
+        setPendingPill(pill);
+        setSession((s) => s + 1);
+      }
+      // Apertura genérica (Hero, navbar, CTAs, flotante): conserva el progreso.
       setMounted(true);
       setOpen(true);
-      // Cada apertura (enlaces, CTAs) reinicia la conversación:
-      // se borra el progreso persistido y se remonta el panel fresco.
-      clearChatState();
-      setSession((s) => s + 1);
+      track("chat_open_source", { source: pill ? "solucion_card" : "generico", intent: pill ?? "" });
     };
     window.addEventListener(CHAT_OPEN_EVENT, onOpen);
     return () => window.removeEventListener(CHAT_OPEN_EVENT, onOpen);
   }, []);
 
   const openPanel = useCallback(() => {
+    // El botón flotante también conserva la conversación en curso.
     setMounted(true);
     setOpen(true);
-    // El botón flotante también abre conversación nueva.
-    clearChatState();
-    setSession((s) => s + 1);
   }, []);
 
   const closePanel = useCallback(() => setOpen(false), []);
@@ -98,7 +104,13 @@ export default function ChatWidget() {
       {/* Chat panel — loaded on first interaction; key remounts it fresh per session */}
       {mounted && (
         <Suspense fallback={<ChatPanelFallback />}>
-          <ChatPanel key={session} open={open} onClose={closePanel} onBriefChange={handleBriefChange} />
+          <ChatPanel
+            key={session}
+            open={open}
+            onClose={closePanel}
+            onBriefChange={handleBriefChange}
+            initialPillLabel={pendingPill}
+          />
         </Suspense>
       )}
     </>

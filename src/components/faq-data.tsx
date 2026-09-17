@@ -83,9 +83,9 @@ export const ITEMS: FaqItem[] = [
       <>
         Tenemos <strong className="font-semibold text-slate-700">tres vías</strong>. Si ya tienes tu
         propia plantilla o diseño, partimos de eso y lo llevamos a producción. Si no,
-        puedes elegir alguna de nuestras{" "}
-        <strong className="font-semibold text-slate-700">plantillas profesionales</strong> del catálogo y
-        adaptarla a tu marca. O bien construimos{" "}
+        partimos de una{" "}
+        <strong className="font-semibold text-slate-700">base profesional</strong> que
+        adaptamos a tu marca. O bien construimos{" "}
         <strong className="font-semibold text-slate-700">todo a medida</strong> desde cero, según cómo
         opera tu negocio. En todos los casos, te acompañamos de punta a punta.
       </>

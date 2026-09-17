@@ -149,8 +149,8 @@ export default function Hero() {
 
             <p className="reveal text-lg md:text-xl text-slate-500 max-w-2xl mb-10" style={{ transitionDelay: "0.1s" }}>
               Tus pedidos, tu inventario y tus cobros no deberían vivir en cuadernos,
-              Excel y WhatsApp. Los convertimos en un sistema a medida — ERP, CRM,
-              POS, e-commerce, aplicaciones móviles o plataforma financiera — y lo
+              Excel y WhatsApp. Los convertimos en un sistema a medida — web,
+              operación, aplicaciones móviles o plataforma financiera — y lo
               llevamos a producción listo para funcionar.
             </p>
 

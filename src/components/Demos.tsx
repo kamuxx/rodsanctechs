@@ -1,15 +1,37 @@
+import { useEffect, useRef } from "react";
+import { track } from "../lib/analytics";
 import { openChatWidget } from "../lib/chat-events";
 
 export default function Demos() {
+  const sectionRef = useRef<HTMLElement>(null);
+
+  // Baseline de conversión #casos: vista de sección (una sola vez).
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el || typeof IntersectionObserver === "undefined") return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) {
+          track("casos_view");
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.25 },
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <section id="casos" className="py-16 md:py-24 bg-slate-50">
+    <section ref={sectionRef} id="casos" className="py-16 md:py-24 bg-white">
       <div className="max-w-6xl mx-auto px-6">
         <h2 className="reveal text-3xl md:text-4xl font-bold tracking-tight mb-4">
-          Demos en preparación
+          Lo que estamos construyendo
         </h2>
         <p className="reveal text-slate-500 text-lg max-w-2xl mb-14" style={{ transitionDelay: "0.1s" }}>
-          Estamos construyendo demos propias para que pruebes un sistema real.
-          Mientras tanto, solicita acceso a una demo privada.
+          Demos operables en construcción: un sistema real que podrás probar con
+          un clic. Mientras tanto, cuéntanos qué necesitas y te avisamos cuando
+          tu demo esté lista.
         </p>
         <div className="grid md:grid-cols-2 gap-6">
           <article className="reveal bg-white border border-slate-200 rounded-2xl overflow-hidden transition-all">
@@ -21,15 +43,20 @@ export default function Demos() {
             </div>
             <div className="p-6">
               <h3 className="text-lg font-bold mb-1">Gestión de Pastelería</h3>
-              <p className="text-sm text-slate-500 leading-relaxed mb-4">
-                Pedidos, recetas, insumos y entregas. Próximamente — pide acceso
-                anticipado.
+              <p className="text-sm text-slate-500 leading-relaxed mb-1">
+                Pedidos, recetas, insumos y entregas.
+              </p>
+              <p className="text-xs font-medium text-amber-600 mb-4">
+                En construcción — demo operable en camino.
               </p>
               <button
-                onClick={openChatWidget}
+                onClick={() => {
+                  track("casos_click", { demo: "pasteleria" });
+                  openChatWidget();
+                }}
                 className="text-sm font-semibold text-accent hover:text-accent-light transition-colors cursor-pointer"
               >
-                Solicitar demo privada →
+                Avísame cuando esté →
               </button>
             </div>
           </article>
@@ -41,15 +68,20 @@ export default function Demos() {
             </div>
             <div className="p-6">
               <h3 className="text-lg font-bold mb-1">Panel de Préstamos</h3>
-              <p className="text-sm text-slate-500 leading-relaxed mb-4">
-                Carteras y amortización para el sector financiero. Próximamente —
-                solicita una demo privada.
+              <p className="text-sm text-slate-500 leading-relaxed mb-1">
+                Carteras y amortización para el sector financiero.
+              </p>
+              <p className="text-xs font-medium text-slate-500 mb-4">
+                Solo en llamada privada bajo NDA.
               </p>
               <button
-                onClick={openChatWidget}
+                onClick={() => {
+                  track("casos_click", { demo: "prestamos-nda" });
+                  openChatWidget();
+                }}
                 className="text-sm font-semibold text-accent hover:text-accent-light transition-colors cursor-pointer"
               >
-                Solicitar demo privada →
+                Agendar llamada →
               </button>
             </div>
           </article>

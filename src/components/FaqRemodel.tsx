@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { FiChevronDown } from "react-icons/fi";
+import { track } from "../lib/analytics";
 import { Check, GUARANTEES, ITEMS } from "./faq-data";
 
 /**
@@ -20,7 +21,11 @@ export default function FaqRemodel() {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   const toggle = (index: number) =>
-    setOpenIndex((current) => (current === index ? null : index));
+    setOpenIndex((current) => {
+      const next = current === index ? null : index;
+      if (next !== null) track("faq_open", { index: next });
+      return next;
+    });
 
   return (
     <section id="faq" className="py-16 md:py-24 bg-white relative overflow-hidden">

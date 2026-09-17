@@ -28,7 +28,8 @@ export default function Empresas() {
         <p className="reveal text-slate-500 text-lg max-w-2xl mb-14" style={{ transitionDelay: "0.1s" }}>
           ¿Tu empresa necesita ampliar su equipo o sumar un sistema completo? Como
           estudio de software a medida nos integramos a tu operación: refuerzo
-          dedicado o proyectos asumidos de punta a punta.
+          dedicado o proyectos asumidos de punta a punta. Migramos desde Excel,
+          WhatsApp o papel sin parar tu operación.
         </p>
 
         <div className="grid sm:grid-cols-2 gap-6">
