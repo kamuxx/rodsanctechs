@@ -1,7 +1,6 @@
 /// <reference types="vite/client" />
 
 interface ImportMetaEnv {
-  readonly VITE_OPENROUTER_KEY?: string;
   readonly VITE_SHEETS_URL?: string;
 }
 

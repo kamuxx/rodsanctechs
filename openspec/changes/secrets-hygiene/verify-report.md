@@ -38,7 +38,7 @@ Manual chat/lead scenarios (tasks 4.3, 4.4) were not executed in a live browser 
 
 **Secret audit**: ✅ Passed
 ```text
-grep sk-or-v1-|AKfycb → no matches in workspace
+grep ***REMOVED***|AKfycb → no matches in workspace
 grep /macros/s/ → matches only in openspec docs (tasks.md, client-config spec), not in src/
 ```
 
@@ -51,7 +51,7 @@ js/** → 0 files
 ### Spec Compliance Matrix
 | Requirement | Scenario | Test | Result |
 |-------------|----------|------|--------|
-| client-config: No Hardcoded Secrets | Repository secret audit | `grep sk-or-v1-\|AKfycb` + `/macros/s/` audit | ✅ COMPLIANT |
+| client-config: No Hardcoded Secrets | Repository secret audit | `grep ***REMOVED***\|AKfycb` + `/macros/s/` audit | ✅ COMPLIANT |
 | client-config: Documented Environment Contract | Developer onboarding | (none found) | ❌ UNTESTED |
 | client-config: Legacy Asset Removal | Single frontend source of truth | filesystem glob `css/**`, `js/**` | ✅ COMPLIANT |
 | client-config: Build Configuration Hygiene | Lint and build gate | `bun run lint`, `bun run build` | ✅ COMPLIANT |

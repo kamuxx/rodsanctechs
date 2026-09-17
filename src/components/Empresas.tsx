@@ -20,7 +20,7 @@ function Check() {
 
 export default function Empresas() {
   return (
-    <section id="empresas" className="py-16 md:py-24 bg-slate-50">
+    <section id="empresas" className="py-16 md:py-24">
       <div className="max-w-6xl mx-auto px-6">
         <h2 className="reveal text-3xl md:text-4xl font-bold tracking-tight mb-4">
           Desarrollo de Software para tu Empresa
@@ -28,7 +28,8 @@ export default function Empresas() {
         <p className="reveal text-slate-500 text-lg max-w-2xl mb-14" style={{ transitionDelay: "0.1s" }}>
           ¿Tu empresa necesita ampliar su equipo o sumar un sistema completo? Como
           estudio de software a medida nos integramos a tu operación: refuerzo
-          dedicado o proyectos asumidos de punta a punta.
+          dedicado o proyectos asumidos de punta a punta. Migramos desde Excel,
+          WhatsApp o papel sin parar tu operación.
         </p>
 
         <div className="grid sm:grid-cols-2 gap-6">

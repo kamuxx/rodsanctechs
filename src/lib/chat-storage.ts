@@ -22,3 +22,16 @@ export function hasCompletedBrief(): boolean {
     return false;
   }
 }
+
+/**
+ * Borra el progreso persistido para que la próxima apertura arranque
+ * conversación nueva. No toca otras claves.
+ */
+export function clearChatState(): void {
+  if (typeof window === "undefined") return;
+  try {
+    window.localStorage.removeItem(CHAT_STORAGE_KEY);
+  } catch {
+    /* ignore */
+  }
+}
