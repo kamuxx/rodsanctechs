@@ -20,7 +20,7 @@ function Check() {
 
 export default function Empresas() {
   return (
-    <section id="empresas" className="py-16 md:py-24 bg-slate-50">
+    <section id="empresas" className="py-16 md:py-24">
       <div className="max-w-6xl mx-auto px-6">
         <h2 className="reveal text-3xl md:text-4xl font-bold tracking-tight mb-4">
           Desarrollo de Software para tu Empresa

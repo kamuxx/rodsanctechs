@@ -433,7 +433,7 @@ Flujo: **encargo con fecha → producción → insumos → entrega**.
   pull-to-refresh).
 - **Límites:** sin build nativo (demo web enmarcada), sin push real, sin tiendas.
 
-### 4.11 `gestion-publicidad` — alcance y pantallas (Later, ID propuesto)
+### 4.11 `gestion-publicidad` — alcance y pantallas (Later)
 
 - **Concepto:** sistema que administra espacios publicitarios (vallas,
   pantallas, mupis) y pauta en medios digitales. Flujo: **inventario →

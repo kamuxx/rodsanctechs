@@ -82,6 +82,7 @@ dos personas — es construir una línea de producto, no un activo de marketing.
 | Pantallas de los 5 pendientes especcadas en maquetación §4.5–4.9                        | Faltaba el cómo construirlos; los módulos ya estaban declarados                          | Dejarlos solo con módulos                         | El builder inventa pantallas y rompe consistencia       | Medio — cierra el hueco de spec        |
 | Nuevos tipos `app-movil` y `gestion-publicidad` en Later, con ID propuesto              | Demanda declarada; `PRODUCT.md` ya ofrece apps móviles                                   | No incluirlos                                     | El portafolio niega capacidad que sí se vende           | Alto — amplía catálogo y cuestionario  |
 | Sección `Soluciones` ampliada con app móvil, CRM, turnos, parking y publicidad         | El usuario lo pidió explícito; el título ya prometía CRM sin tarjeta                    | Mantener el Not Doing de secciones                | La vitrina niega lo que el cuestionario ya ofrece       | Medio — copy del sitio, no del catálogo |
+| Homologación oferta: `crm`, `sistema-turnos`, `sistema-parking` y `gestion-publicidad` en el cuestionario + Hero con apps móviles + `check-offer-sync.mjs` | Cada tarjeta debe poder pedirse por el chat; OQ10 cerrada | Solo las 11 intenciones                           | Vitrina que promete lo que el embudo no atiende         | Alto — cierra el hueco oferta/embudo    |
 
 ## Core Assumption
 
@@ -162,9 +163,11 @@ El catálogo completo de 20 rubros se construye incremental y nunca en un solo s
 - **App móvil** (`app-movil`) — demo enmarcada 390×844 con un
   flujo core completo (pedir → seguir → recibir). Base `SYSTEM_TIMELINE`.
   Spec en `MAQUETA_LANDINGS.md` §4.10.
-- **Gestión de espacios publicitarios** (`gestion-publicidad`, ID propuesto) —
+- **Gestión de espacios publicitarios** (`gestion-publicidad`) —
   inventario → disponibilidad → contratación → reporte de exposición.
   Base `SYSTEM_TIMELINE`. Spec en `MAQUETA_LANDINGS.md` §4.11.
+- **CRM** (`crm`) — tarjeta y cuestionario activos; demo operable fuera de
+  alcance hasta validar demanda. Ver §13.
 - **Selector de tipo de proyecto** sobre una sola app: se construye cuando existan al menos
   3 demos y el shell esté probado.
 
@@ -353,7 +356,7 @@ Ese es el argumento técnico para que 20 landings sean viables en vez de una lí
 - **Riesgo primario:** expectativa de app publicada en tiendas. Mitigación:
   marco de demo explícito y una sola plataforma.
 
-### 12. Gestión de publicidad — `gestion-publicidad` (Later, ID propuesto pendiente de alta en SSOT)
+### 12. Gestión de publicidad — `gestion-publicidad` (Later)
 
 - **Concepto:** sistema que administra espacios publicitarios físicos y pauta
   digital, desde el inventario hasta el reporte.
@@ -365,6 +368,16 @@ Ese es el argumento técnico para que 20 landings sean viables en vez de una lí
   calendarizado, no una grilla genérica.
 - **Riesgo primario:** confundirlo con un ERP. Mitigación: el objeto central
   es el espacio pautado, no el stock.
+
+### 13. CRM — `crm` (cuestionario y tarjeta activos; demo sin definir)
+
+- **Concepto:** el CRM se vende por conversación, no por demo: tarjeta en
+  Soluciones + intención completa en el chat. El demo operable queda fuera
+  de alcance hasta validar demanda (Validation Plan).
+- **Qué prueba hoy:** que el estudio entiende el objeto (clientes, seguimiento,
+  oportunidades) desde la primera pregunta.
+- **Riesgo primario:** ofrecer sin demo mientras el resto del catálogo promete
+  prueba operable. Mitigación: alcance declarado solo si el visitante lo pide.
 
 ## Sistema de diseño del catálogo
 
@@ -451,10 +464,6 @@ Estas vienen de `PLAN_RRSS_30_DIAS.md` y aplican a cada landing del catálogo:
    si el catálogo y el producto de plantillas son el mismo activo o dos artefactos separados.
 9. **Cómo se selecciona el rubro en el demo:** por ruta, por query param o por menú del
    shell. Cambia el esfuerzo de la variante por rubro.
-10. **Alta de `gestion-publicidad` en la SSOT:** unión de intenciones,
-    `closingSteps`, modalidad y timeline en `src/lib/faq_brief_questions.ts` + lista
-    en `src/hooks/useChat.ts`. (`app-movil` ya fue dada de alta.) Es trabajo de código
-    separado; hasta hacerlo, el ID es propuesto y el chat no lo ofrece.
 
 ## Readiness Score
 

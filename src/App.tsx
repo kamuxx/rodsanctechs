@@ -6,7 +6,7 @@ import Proceso from "./components/Proceso";
 import Equipo from "./components/Equipo";
 import Empresas from "./components/Empresas";
 import Tecnologias from "./components/Tecnologias";
-import Faq from "./components/Faq";
+import Faq from "./components/FaqRemodel";
 import Contacto from "./components/Contacto";
 import Footer from "./components/Footer";
 import ChatWidget from "./components/ChatWidget";

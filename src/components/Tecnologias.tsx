@@ -81,7 +81,7 @@ function groupTech(names: string[]) {
 
 export default function Tecnologias() {
   return (
-    <section id="tecnologias" className="py-16 md:py-24">
+    <section id="tecnologias" className="py-16 md:py-24 bg-slate-50">
       <div className="max-w-6xl mx-auto px-6">
         <h2 className="reveal text-3xl md:text-4xl font-bold tracking-tight mb-4">
           Tecnologías que Usamos en Nuestro Desarrollo

@@ -15,7 +15,11 @@ export type IntentionId =
   | "gestion-pasteleria"
   | "fintech-prestamos"
   | "fintech-inversiones"
-  | "fintech-seguros";
+  | "fintech-seguros"
+  | "crm"
+  | "sistema-turnos"
+  | "sistema-parking"
+  | "gestion-publicidad";
 
 /** Claves FAQ de BriefData. Sin campos de contacto. */
 export type FaqMapsTo =
@@ -322,6 +326,46 @@ const INSURANCE_MODALIDAD: ClosingList = {
     { id: "nuevo", title: "Sistema nuevo" },
     { id: "mejorar", title: "Mejorar el que ya operan" },
     { id: "integrar", title: "Integrar pólizas, siniestros o comisiones" },
+    OTROS,
+  ],
+};
+
+const CRM_MODALIDAD: ClosingList = {
+  prompt: "¿Cómo quieren el CRM?",
+  options: [
+    { id: "nuevo", title: "CRM nuevo" },
+    { id: "reemplazar", title: "Dejar Excel, libretas o varios sistemas" },
+    { id: "conectar", title: "Conectar con ventas, soporte o marketing" },
+    OTROS,
+  ],
+};
+
+const TURNOS_MODALIDAD: ClosingList = {
+  prompt: "¿Cómo quieren el sistema de turnos?",
+  options: [
+    { id: "nuevo", title: "Sistema nuevo" },
+    { id: "reemplazar", title: "Dejar agenda en papel, Excel o WhatsApp" },
+    { id: "conectar", title: "Conectar con lo que ya usan" },
+    OTROS,
+  ],
+};
+
+const PARKING_MODALIDAD: ClosingList = {
+  prompt: "¿Cómo quieren el sistema del estacionamiento?",
+  options: [
+    { id: "nuevo", title: "Sistema nuevo" },
+    { id: "reemplazar", title: "Dejar el control manual o en papel" },
+    { id: "conectar", title: "Conectar con caja o accesos que ya tienen" },
+    OTROS,
+  ],
+};
+
+const ADS_MODALIDAD: ClosingList = {
+  prompt: "¿Cómo quieren el sistema de publicidad?",
+  options: [
+    { id: "nuevo", title: "Sistema nuevo" },
+    { id: "reemplazar", title: "Dejar Excel o el control manual" },
+    { id: "integrar", title: "Integrar espacios físicos y pauta digital" },
     OTROS,
   ],
 };
@@ -931,6 +975,195 @@ const INTENTIONS: Record<IntentionId, IntentionFaq> = {
       ...closingSteps("insurance", INSURANCE_MODALIDAD, SYSTEM_TIMELINE),
     ],
   },
+  crm: {
+    id: "crm",
+    projectType: "CRM a medida",
+    pillLabel: "CRM a medida",
+    description: "Clientes, seguimiento y oportunidades en un solo lugar.",
+    steps: [
+      {
+        id: "crm-problem",
+        prompt: "¿Qué necesitan ordenar primero?",
+        mapsTo: "problem",
+        choice: "check",
+        options: [
+          { id: "clientes", title: "Clientes" },
+          { id: "seguimiento", title: "Seguimiento" },
+          { id: "oportunidades", title: "Oportunidades" },
+          { id: "reportes", title: "Reportes" },
+          OTROS,
+        ],
+      },
+      {
+        id: "crm-target",
+        prompt: "¿Quiénes lo usarían?",
+        mapsTo: "target",
+        choice: "check",
+        options: [
+          { id: "ventas", title: "Ventas" },
+          { id: "soporte", title: "Soporte" },
+          { id: "marketing", title: "Marketing" },
+          OTROS,
+        ],
+      },
+      {
+        id: "crm-detail",
+        prompt: "¿Cuántas personas lo usarían?",
+        mapsTo: "detailValue",
+        detailLabel: "Tamaño del equipo",
+        choice: "radio",
+        options: [
+          { id: "1-5", title: "1 a 5" },
+          { id: "6-20", title: "6 a 20" },
+          { id: "20+", title: "Más de 20" },
+          OTROS,
+        ],
+      },
+      ...closingSteps("crm", CRM_MODALIDAD, SYSTEM_TIMELINE),
+    ],
+  },
+  "sistema-turnos": {
+    id: "sistema-turnos",
+    projectType: "Sistema de turnos médicos",
+    pillLabel: "Sistema de turnos médicos",
+    description: "Agenda, pacientes y recordatorios para consultorios y veterinarias.",
+    steps: [
+      {
+        id: "turnos-problem",
+        prompt: "¿Qué necesitan resolver?",
+        mapsTo: "problem",
+        choice: "check",
+        options: [
+          { id: "agenda", title: "Agenda" },
+          { id: "pacientes", title: "Pacientes" },
+          { id: "recordatorios", title: "Recordatorios" },
+          { id: "obras-sociales", title: "Obras sociales" },
+          OTROS,
+        ],
+      },
+      {
+        id: "turnos-target",
+        prompt: "¿Quiénes lo operarían?",
+        mapsTo: "target",
+        choice: "check",
+        options: [
+          { id: "recepcion", title: "Recepción" },
+          { id: "profesionales", title: "Profesionales" },
+          { id: "admin", title: "Administración" },
+          OTROS,
+        ],
+      },
+      {
+        id: "turnos-detail",
+        prompt: "¿Para qué especialidad es?",
+        mapsTo: "detailValue",
+        detailLabel: "Especialidad",
+        choice: "radio",
+        options: [
+          { id: "odontologia", title: "Odontología" },
+          { id: "cardiologia", title: "Cardiología" },
+          { id: "veterinaria", title: "Veterinaria" },
+          { id: "otra", title: "Otra especialidad" },
+          OTROS,
+        ],
+      },
+      ...closingSteps("turnos", TURNOS_MODALIDAD, OPS_TIMELINE),
+    ],
+  },
+  "sistema-parking": {
+    id: "sistema-parking",
+    projectType: "Sistema de estacionamiento",
+    pillLabel: "Sistema de estacionamiento",
+    description: "Disponibilidad, reservas, cobro y cierre.",
+    steps: [
+      {
+        id: "parking-problem",
+        prompt: "¿Qué necesitan controlar?",
+        mapsTo: "problem",
+        choice: "check",
+        options: [
+          { id: "disponibilidad", title: "Disponibilidad" },
+          { id: "reservas", title: "Reservas" },
+          { id: "cobro", title: "Cobro" },
+          { id: "cierre", title: "Cierre" },
+          OTROS,
+        ],
+      },
+      {
+        id: "parking-target",
+        prompt: "¿Quiénes lo operarían?",
+        mapsTo: "target",
+        choice: "check",
+        options: [
+          { id: "operadores", title: "Operadores" },
+          { id: "caja", title: "Caja" },
+          { id: "admin", title: "Administración" },
+          OTROS,
+        ],
+      },
+      {
+        id: "parking-detail",
+        prompt: "¿Cuántos lugares tiene la playa?",
+        mapsTo: "detailValue",
+        detailLabel: "Tamaño de la playa",
+        choice: "radio",
+        options: [
+          { id: "lt50", title: "Menos de 50" },
+          { id: "50-200", title: "50 a 200" },
+          { id: "200+", title: "Más de 200" },
+          OTROS,
+        ],
+      },
+      ...closingSteps("parking", PARKING_MODALIDAD, OPS_TIMELINE),
+    ],
+  },
+  "gestion-publicidad": {
+    id: "gestion-publicidad",
+    projectType: "Gestión de publicidad",
+    pillLabel: "Gestión de publicidad",
+    description: "Espacios, disponibilidad y reportes de exposición.",
+    steps: [
+      {
+        id: "ads-problem",
+        prompt: "¿Qué necesitan administrar?",
+        mapsTo: "problem",
+        choice: "check",
+        options: [
+          { id: "espacios", title: "Espacios" },
+          { id: "disponibilidad", title: "Disponibilidad" },
+          { id: "contratacion", title: "Contratación" },
+          { id: "reportes", title: "Reportes" },
+          OTROS,
+        ],
+      },
+      {
+        id: "ads-target",
+        prompt: "¿Quiénes lo usarían?",
+        mapsTo: "target",
+        choice: "check",
+        options: [
+          { id: "comercial", title: "Comercial" },
+          { id: "admin", title: "Administración" },
+          { id: "anunciantes", title: "Anunciantes" },
+          OTROS,
+        ],
+      },
+      {
+        id: "ads-detail",
+        prompt: "¿Qué tipo de inventario manejan?",
+        mapsTo: "detailValue",
+        detailLabel: "Tipo de inventario",
+        choice: "radio",
+        options: [
+          { id: "vallas", title: "Vallas y mupis" },
+          { id: "pantallas", title: "Pantallas" },
+          { id: "digital", title: "Medios digitales" },
+          OTROS,
+        ],
+      },
+      ...closingSteps("ads", ADS_MODALIDAD, SYSTEM_TIMELINE),
+    ],
+  },
 };
 
 const INTENTION_ORDER = [
@@ -945,6 +1178,10 @@ const INTENTION_ORDER = [
   "fintech-prestamos",
   "fintech-inversiones",
   "fintech-seguros",
+  "crm",
+  "sistema-turnos",
+  "sistema-parking",
+  "gestion-publicidad",
 ] as const satisfies readonly IntentionId[];
 
 export const PILL_LABELS: readonly string[] = INTENTION_ORDER.map(

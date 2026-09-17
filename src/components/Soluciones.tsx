@@ -53,7 +53,7 @@ function ServiceCard({ service, index }: { service: Service; index: number }) {
 
 export default function Soluciones() {
   return (
-    <section id="servicios" className="py-16 md:py-24">
+    <section id="servicios" className="py-16 md:py-24 bg-slate-50">
       <div className="max-w-6xl mx-auto px-6">
         <h2 className="reveal text-3xl md:text-4xl font-bold tracking-tight mb-4">
           Sistemas de Gestión a Medida: ERP, CRM y POS
@@ -71,7 +71,7 @@ export default function Soluciones() {
         <div>
           <div className="reveal flex items-baseline gap-3 mb-6">
             <h3 className="text-xl font-bold">Soluciones para tu negocio</h3>
-            <span className="text-sm text-slate-400">
+            <span className="text-sm text-slate-500">
               {pymeServices.length} soluciones
             </span>
           </div>
@@ -96,7 +96,7 @@ export default function Soluciones() {
           <div className="h-1 bg-gradient-to-r from-accent to-cyan rounded-full mb-6" />
           <div className="reveal flex items-baseline gap-3 mb-6">
             <h3 className="text-xl font-bold">Soluciones Fintech & Seguros</h3>
-            <span className="text-sm text-slate-400">
+            <span className="text-sm text-slate-500">
               {fintechServices.length} soluciones
             </span>
           </div>
